@@ -9,6 +9,7 @@ import { useCart } from './cart/CartProvider';
 export default function MenuExplorer({ menu }: { menu: MenuSection[] }) {
   const cats = ['All', ...menu.map((s) => s.title)];
   const [active, setActive] = useState('All');
+  const [query, setQuery] = useState('');
   const { add } = useCart();
   const [justAdded, setJustAdded] = useState<string | null>(null);
 
@@ -21,10 +22,55 @@ export default function MenuExplorer({ menu }: { menu: MenuSection[] }) {
     setTimeout(() => setJustAdded((c) => (c === id ? null : c)), 1000);
   };
 
-  const sections = active === 'All' ? menu : menu.filter((s) => s.title === active);
+  const base = active === 'All' ? menu : menu.filter((s) => s.title === active);
+  const q = query.trim().toLowerCase();
+  const sections = q
+    ? base
+        .map((s) => ({
+          ...s,
+          items: s.items.filter(
+            (it) =>
+              it.name.toLowerCase().includes(q) ||
+              (it.desc?.toLowerCase().includes(q) ?? false)
+          ),
+        }))
+        .filter((s) => s.items.length > 0)
+    : base;
+  const resultCount = sections.reduce((n, s) => n + s.items.length, 0);
 
   return (
     <div>
+      {/* search */}
+      <div className="mb-6 relative max-w-md">
+        <svg
+          viewBox="0 0 24 24"
+          className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-ash/40"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <circle cx="11" cy="11" r="7" />
+          <path d="M21 21l-4.3-4.3" strokeLinecap="round" />
+        </svg>
+        <input
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Search dishes…"
+          data-cursor
+          className="w-full rounded-full border border-ash/15 bg-coal/60 py-3 pl-11 pr-10 text-sm text-ash outline-none placeholder:text-ash/30 focus:border-magma"
+        />
+        {query && (
+          <button
+            onClick={() => setQuery('')}
+            data-cursor
+            aria-label="Clear search"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-ash/50 hover:text-magma"
+          >
+            ✕
+          </button>
+        )}
+      </div>
+
       <div className="mb-12 flex flex-wrap gap-3">
         {cats.map((c) => (
           <button
@@ -42,8 +88,30 @@ export default function MenuExplorer({ menu }: { menu: MenuSection[] }) {
         ))}
       </div>
 
-      <div className="space-y-16">
-        {sections.map((sec) => (
+      {q && (
+        <p className="mb-8 text-sm text-ash/50">
+          {resultCount} result{resultCount === 1 ? '' : 's'} for &ldquo;{query}&rdquo;
+        </p>
+      )}
+
+      {resultCount === 0 ? (
+        <div className="py-20 text-center">
+          <p className="kinetic text-3xl text-ash/70">No dishes found</p>
+          <p className="mt-2 text-sm text-ash/50">Try another search or clear the filter.</p>
+          <button
+            onClick={() => {
+              setQuery('');
+              setActive('All');
+            }}
+            data-cursor
+            className="mt-5 rounded-full border border-magma/50 px-6 py-2 text-xs uppercase tracking-widest text-magma hover:bg-magma hover:text-obsidian"
+          >
+            Reset
+          </button>
+        </div>
+      ) : (
+        <div className="space-y-16">
+          {sections.map((sec) => (
           <div key={sec.title}>
             <div className="mb-6 flex items-baseline gap-4">
               <h2 className="kinetic text-3xl text-magma-grad md:text-4xl">{sec.title}</h2>
@@ -105,8 +173,9 @@ export default function MenuExplorer({ menu }: { menu: MenuSection[] }) {
               </AnimatePresence>
             </motion.div>
           </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
