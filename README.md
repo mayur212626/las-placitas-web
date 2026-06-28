@@ -6,9 +6,9 @@ The goal was to make the site feel like the food: bold, warm, and a little bit o
 
 > Status: still working on this. It is an active work in progress, so expect things to change and a few rough edges while I keep polishing.
 
-## Live preview
+## Live site
 
-Run it locally (see below). A hosted version is coming soon.
+https://las-placitas-web.vercel.app
 
 ## Features
 
@@ -91,9 +91,9 @@ lib/                 menu data and small utilities
 
 Things I still want to add:
 
-- Deploy a hosted version
 - Real food photography in place of the generated art
 - More menu detail and an online ordering flow
+- A custom domain
 
 ## Author
 
