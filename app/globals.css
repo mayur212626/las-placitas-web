@@ -1,0 +1,119 @@
+@import 'lenis/dist/lenis.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-obsidian text-ash font-body antialiased;
+  cursor: none;
+}
+@media (pointer: coarse) {
+  body { cursor: auto; }
+}
+
+.container-x {
+  @apply mx-auto w-full max-w-7xl px-6;
+}
+
+/* huge condensed kinetic display type */
+.kinetic {
+  font-family: var(--font-display), sans-serif;
+  text-transform: uppercase;
+  line-height: 0.86;
+  letter-spacing: -0.01em;
+}
+
+/* magma gradient fill text */
+.text-magma-grad {
+  background: linear-gradient(120deg, #ff9d2e 0%, #ff5e1a 45%, #e11d62 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* hollow outline display text */
+.text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(232, 226, 216, 0.55);
+}
+
+/* neon glow */
+.glow-magma {
+  text-shadow: 0 0 18px rgba(255, 94, 26, 0.55), 0 0 42px rgba(225, 29, 98, 0.35);
+}
+
+/* glass card */
+.glass {
+  background: rgba(34, 27, 22, 0.45);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(232, 226, 216, 0.08);
+}
+
+/* film grain overlay for the whole page */
+.grain::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  pointer-events: none;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* glitch hover for cards */
+.glitch {
+  position: relative;
+}
+.glitch::before,
+.glitch::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: inherit;
+  opacity: 0;
+  mix-blend-mode: screen;
+  transition: opacity 0.2s;
+}
+.glitch:hover::before {
+  opacity: 0.5;
+  transform: translate(3px, -2px);
+  background: rgba(225, 29, 98, 0.25);
+}
+.glitch:hover::after {
+  opacity: 0.5;
+  transform: translate(-3px, 2px);
+  background: rgba(182, 255, 46, 0.18);
+}
+
+::selection {
+  background: #ff5e1a;
+  color: #0a0807;
+}
+
+@keyframes eq {
+  from { height: 4px; }
+  to { height: 16px; }
+}
+
+/* accessibility: respect reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  body {
+    cursor: auto;
+  }
+}
