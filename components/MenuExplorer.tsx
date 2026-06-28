@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { MenuSection } from '@/lib/data';
+import AddToCart from './cart/AddToCart';
 
 /** Filterable menu with animated reflow between categories. */
 export default function MenuExplorer({ menu }: { menu: MenuSection[] }) {
@@ -58,6 +59,9 @@ export default function MenuExplorer({ menu }: { menu: MenuSection[] }) {
                     {it.desc && (
                       <p className="mt-1 text-sm leading-snug text-ash/55">{it.desc}</p>
                     )}
+                    <div className="mt-3">
+                      <AddToCart id={`${sec.title}-${it.name}`} name={it.name} price={it.price} />
+                    </div>
                   </motion.div>
                 ))}
               </AnimatePresence>

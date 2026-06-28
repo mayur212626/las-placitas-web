@@ -12,6 +12,8 @@ import Preloader from '@/components/Preloader';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import OrderModal from '@/components/OrderModal';
+import { CartProvider } from '@/components/cart/CartProvider';
+import CartDrawer from '@/components/cart/CartDrawer';
 
 const display = Anton({
   weight: '400',
@@ -84,9 +86,12 @@ export default function RootLayout({
         <SoundToggle />
         <BackToTop />
         <OrderModal />
-        <Navbar />
-        {children}
-        <Footer />
+        <CartProvider>
+          <Navbar />
+          <CartDrawer />
+          {children}
+          <Footer />
+        </CartProvider>
       </body>
     </html>
   );

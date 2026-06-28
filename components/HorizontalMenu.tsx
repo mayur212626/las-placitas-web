@@ -3,6 +3,7 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import FoodArt, { type FoodKind } from './FoodArt';
+import AddToCart from './cart/AddToCart';
 
 type Panel = { title: string; price?: string; desc?: string; kind: FoodKind; accent: string };
 
@@ -42,6 +43,9 @@ export default function HorizontalMenu({ panels }: { panels: Panel[] }) {
                   {p.desc && (
                     <p className="mt-2 max-w-md text-sm text-ash/60">{p.desc}</p>
                   )}
+                  <div className="mt-4">
+                    <AddToCart id={`signature-${p.title}`} name={p.title} price={p.price} />
+                  </div>
                 </div>
                 {p.price && (
                   <span className="kinetic text-magma-grad text-4xl md:text-6xl">

@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Logo from './Logo';
+import CartButton from './cart/CartButton';
 
 const links = [
   { href: '/', label: 'Home' },
@@ -55,13 +56,16 @@ export default function Navbar() {
           ))}
         </ul>
 
-        <a
-          href="#"
-          data-order
-          className="hidden rounded-full border border-magma/60 px-5 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-magma transition-colors hover:bg-magma hover:text-obsidian md:inline-block"
-        >
-          Order
-        </a>
+        <div className="flex items-center gap-3">
+          <CartButton />
+          <a
+            href="#"
+            data-order
+            className="hidden rounded-full border border-magma/60 px-5 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-magma transition-colors hover:bg-magma hover:text-obsidian md:inline-block"
+          >
+            Order
+          </a>
+        </div>
 
         <button onClick={() => setOpen((v) => !v)} className="text-ash md:hidden" aria-label="Menu">
           <div className="space-y-1.5">
