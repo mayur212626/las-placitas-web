@@ -4,6 +4,8 @@ A website for Las Placitas, a Mexican and Salvadoran restaurant in Washington, D
 
 The goal was to make the site feel like the food: bold, warm, and a little bit on fire. The whole experience is built around a 3D volcano you can scroll into, with a molten "obsidian" theme running through every page.
 
+> Note: this is an unofficial concept redesign I built as a personal project to practice 3D and animation on the web. The real Las Placitas restaurant already has its own official website. This project is not affiliated with or endorsed by the restaurant, and the menu and contact details are used here for demonstration only.
+
 > Status: still working on this. It is an active work in progress, so expect things to change and a few rough edges while I keep polishing.
 
 ## Live site

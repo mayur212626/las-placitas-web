@@ -30,7 +30,7 @@ const SITE_DESC =
   'Volcanic flavor. Authentic Mexican & Salvadoran food, born of fire and tradition since 1990. Two DC locations. Pupusas, fajitas, mariscos, homemade margaritas.';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://lasplacitasrestaurant.com'),
+  metadataBase: new URL('https://las-placitas-web.vercel.app'),
   title: {
     default: 'LAS PLACITAS — Fire-Born Mexican & Salvadoran · Washington, DC',
     template: '%s · Las Placitas',
