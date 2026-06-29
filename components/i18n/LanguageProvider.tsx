@@ -23,7 +23,7 @@ const dict: Dict = {
   'hero.sub2': { en: 'and tradition.', es: 'y la tradición.' },
   'hero.viewMenu': { en: 'View Menu', es: 'Ver Menú' },
   'hero.findUs': { en: 'Find Us', es: 'Encuéntranos' },
-  'hero.scroll': { en: 'Scroll — dive into the crater', es: 'Desplázate — bucea en el cráter' },
+  'hero.scroll': { en: 'Scroll to explore', es: 'Desplázate para explorar' },
 
   // about
   'about.kicker': { en: "It's our passion", es: 'Es nuestra pasión' },

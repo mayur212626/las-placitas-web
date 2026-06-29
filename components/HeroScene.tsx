@@ -22,91 +22,27 @@ import Volcano from './Volcano';
 import LavaPlane from './LavaPlane';
 import { heroProgress } from '@/lib/scroll';
 
-// Cinematic camera keyframes: [progress, posX,posY,posZ, lookX,lookY,lookZ, fov]
-const KEYS: number[][] = [
-  [0.0, 0, 1.6, 8.5, 0, 0.4, 0, 40],
-  [0.3, 0, 1.4, 5.5, 0, 0.9, 0, 38],
-  [0.55, 0, 2.2, 3.2, 0, 1.7, 0, 34],
-  [0.78, 0, 2.7, 1.3, 0, 1.85, 0, 30],
-  [1.0, 0, 2.05, 0.1, 0, 1.7, -1.2, 24],
-];
-
-function sampleKeys(p: number) {
-  let a = KEYS[0];
-  let b = KEYS[KEYS.length - 1];
-  for (let i = 0; i < KEYS.length - 1; i++) {
-    if (p >= KEYS[i][0] && p <= KEYS[i + 1][0]) {
-      a = KEYS[i];
-      b = KEYS[i + 1];
-      break;
-    }
-  }
-  const span = b[0] - a[0] || 1;
-  let t = (p - a[0]) / span;
-  t = t * t * (3 - 2 * t); // smoothstep
-  const out: number[] = [];
-  for (let i = 1; i < a.length; i++) out.push(a[i] + (b[i] - a[i]) * t);
-  return out; // [px,py,pz, lx,ly,lz, fov]
-}
-
-/** Flies the camera into the crater along a cinematic path as the hero scrolls. */
+/**
+ * Gentle scroll-reactive camera. Pushes in a little and rises slightly toward
+ * the glowing crater as you scroll, but never plunges into the cone — the
+ * volcano stays framed the whole time so there is never a black void.
+ */
 function CameraRig() {
   useFrame((state) => {
     const p = heroProgress();
     const cam = state.camera as THREE.PerspectiveCamera;
-    const k = sampleKeys(p);
-    cam.position.x += (k[0] - cam.position.x) * 0.08;
-    cam.position.y += (k[1] - cam.position.y) * 0.08;
-    cam.position.z += (k[2] - cam.position.z) * 0.08;
-    cam.lookAt(k[3], k[4], k[5]);
-    const targetFov = k[6];
+    // bounded push: z 8 → 6, slight rise, gaze lifts toward the crater
+    cam.position.x += (0 - cam.position.x) * 0.06;
+    cam.position.y += (1.6 + p * 0.5 - cam.position.y) * 0.06;
+    cam.position.z += (8 - p * 2 - cam.position.z) * 0.06;
+    cam.lookAt(0, 0.5 + p * 0.7, 0);
+    const targetFov = 40 - p * 4;
     if (Math.abs(cam.fov - targetFov) > 0.05) {
-      cam.fov += (targetFov - cam.fov) * 0.08;
+      cam.fov += (targetFov - cam.fov) * 0.06;
       cam.updateProjectionMatrix();
-    }
-    // eruption rumble as we approach the mouth
-    if (p > 0.6) {
-      const s = (p - 0.6) * 0.22;
-      cam.position.x += (Math.random() - 0.5) * s;
-      cam.position.y += (Math.random() - 0.5) * s;
     }
   });
   return null;
-}
-
-/** Plates that rise out of the lava and bloom in during the crater dive. */
-function EmergingDishes() {
-  const group = useRef<THREE.Group>(null);
-  useFrame(() => {
-    const p = heroProgress();
-    const e = Math.max(0, Math.min(1, (p - 0.55) / 0.4)); // 0 at p=.55 → 1 at p=.95
-    if (group.current) {
-      group.current.visible = e > 0.01;
-      group.current.scale.setScalar(e);
-      group.current.position.y = -0.8 + e * 1.8;
-      group.current.rotation.y += 0.01;
-    }
-  });
-  const ring = [0, 1, 2].map((i) => {
-    const a = (i / 3) * Math.PI * 2;
-    return [Math.cos(a) * 1.5, 0, Math.sin(a) * 1.5] as [number, number, number];
-  });
-  return (
-    <group ref={group} position={[0, -0.8, 0]} visible={false}>
-      {ring.map((pos, i) => (
-        <group key={i} position={pos}>
-          <mesh>
-            <cylinderGeometry args={[0.5, 0.46, 0.06, 32]} />
-            <meshStandardMaterial color="#f3ede2" roughness={0.5} emissive="#ff5e1a" emissiveIntensity={0.25} />
-          </mesh>
-          <mesh position={[0, 0.07, 0]}>
-            <cylinderGeometry args={[0.34, 0.36, 0.12, 24]} />
-            <meshStandardMaterial color={['#e7c982', '#7a1f12', '#2f5d36'][i]} roughness={0.7} />
-          </mesh>
-        </group>
-      ))}
-    </group>
-  );
 }
 
 /** A pupusa-style plate that slowly orbits the volcano. */
@@ -186,7 +122,6 @@ export default function HeroScene() {
           <group scale={0.95}>
             <Volcano lowPerf={lowPerf} />
             <OrbitingPlate />
-            <EmergingDishes />
           </group>
         </PresentationControls>
         <Environment preset="night" />

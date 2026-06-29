@@ -5,7 +5,7 @@
  */
 export function heroProgress(): number {
   if (typeof window === 'undefined') return 0;
-  // hero is 200vh tall and sticky, so it stays pinned across ~1 viewport of scroll
+  // gentle eruption ramp across the first viewport of scrolling
   const travel = window.innerHeight * 1.0;
   const p = window.scrollY / travel;
   return p < 0 ? 0 : p > 1 ? 1 : p;

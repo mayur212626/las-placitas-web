@@ -32,19 +32,17 @@ export default function Home() {
   const { t, lang } = useLang();
   return (
     <main id="home" className="relative overflow-x-hidden">
-      {/* ================= CINEMATIC HERO (pinned dive) ================= */}
-      <section className="relative h-[200vh]">
-        <div className="sticky top-0 h-screen overflow-hidden">
-          <div className="absolute inset-0">
-            <HeroCanvas />
-          </div>
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-obsidian via-obsidian/20 to-transparent" />
+      {/* ================= HERO ================= */}
+      <section className="relative min-h-screen overflow-hidden">
+        <div className="absolute inset-0">
+          <HeroCanvas />
+        </div>
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-obsidian via-obsidian/20 to-transparent" />
 
-          <HeroContent since={brand.since} />
+        <HeroContent since={brand.since} />
 
-          <div className="absolute bottom-6 left-1/2 z-10 -translate-x-1/2 animate-glowPulse text-xs uppercase tracking-[0.3em] text-ash/50">
-            Scroll — dive into the crater
-          </div>
+        <div className="absolute bottom-6 left-1/2 z-10 -translate-x-1/2 animate-glowPulse text-xs uppercase tracking-[0.3em] text-ash/50">
+          {t('hero.scroll')}
         </div>
       </section>
 

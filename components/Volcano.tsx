@@ -89,6 +89,25 @@ export default function Volcano({ lowPerf = false }: { lowPerf?: boolean }) {
         <torusGeometry args={[0.72, 0.12, 12, 40]} />
         <meshStandardMaterial color="#3a2c25" roughness={1} />
       </mesh>
+
+      {/* glowing lava throat — a molten tube down the crater so the camera
+          dive plunges into glowing magma instead of a black void */}
+      <mesh position={[0, 0.4, 0]}>
+        <cylinderGeometry args={[0.66, 0.28, 3.0, 32, 1, true]} />
+        <meshStandardMaterial
+          color="#ff5e1a"
+          emissive="#ff6a1f"
+          emissiveIntensity={3.2}
+          side={THREE.BackSide}
+          toneMapped={false}
+        />
+      </mesh>
+      {/* molten pool deep in the throat */}
+      <mesh position={[0, -1.0, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <circleGeometry args={[0.4, 32]} />
+        <meshStandardMaterial color="#ffd27a" emissive="#ff8a1f" emissiveIntensity={4} toneMapped={false} />
+      </mesh>
+
       {/* crater glow disc */}
       <mesh position={[0, 1.7, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <circleGeometry args={[0.66, 32]} />
@@ -100,6 +119,7 @@ export default function Volcano({ lowPerf = false }: { lowPerf?: boolean }) {
         />
       </mesh>
       <pointLight ref={crater} position={[0, 2.0, 0]} color="#ff6a1f" intensity={16} distance={9} />
+      <pointLight position={[0, 0.2, 0]} color="#ff7a1f" intensity={8} distance={5} />
 
       {/* thin drifting smoke wisp — kept light so the cone stays the star */}
       <group ref={smoke} position={[0, 3.0, 0]}>
