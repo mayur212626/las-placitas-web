@@ -4,9 +4,11 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { MenuSection, Item } from '@/lib/data';
 import { useCart } from './cart/CartProvider';
+import { useLang } from './i18n/LanguageProvider';
 
 /** Filterable menu with animated reflow between categories. */
 export default function MenuExplorer({ menu }: { menu: MenuSection[] }) {
+  const { t, lang } = useLang();
   const cats = ['All', ...menu.map((s) => s.title)];
   const [active, setActive] = useState('All');
   const [query, setQuery] = useState('');
@@ -55,7 +57,7 @@ export default function MenuExplorer({ menu }: { menu: MenuSection[] }) {
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search dishes…"
+          placeholder={t('menu.search')}
           data-cursor
           className="w-full rounded-full border border-ash/15 bg-coal/60 py-3 pl-11 pr-10 text-sm text-ash outline-none placeholder:text-ash/30 focus:border-magma"
         />
@@ -72,32 +74,39 @@ export default function MenuExplorer({ menu }: { menu: MenuSection[] }) {
       </div>
 
       <div className="mb-12 flex flex-wrap gap-3">
-        {cats.map((c) => (
-          <button
-            key={c}
-            onClick={() => setActive(c)}
-            data-cursor
-            className={`rounded-full border px-5 py-2 text-xs font-semibold uppercase tracking-widest transition-colors ${
-              active === c
-                ? 'border-magma bg-magma text-obsidian'
-                : 'border-ash/20 text-ash/70 hover:border-magma/60 hover:text-magma'
-            }`}
-          >
-            {c}
-          </button>
-        ))}
+        {cats.map((c) => {
+          const label =
+            c === 'All'
+              ? t('menu.all')
+              : (lang === 'es' && menu.find((s) => s.title === c)?.titleEs) || c;
+          return (
+            <button
+              key={c}
+              onClick={() => setActive(c)}
+              data-cursor
+              className={`rounded-full border px-5 py-2 text-xs font-semibold uppercase tracking-widest transition-colors ${
+                active === c
+                  ? 'border-magma bg-magma text-obsidian'
+                  : 'border-ash/20 text-ash/70 hover:border-magma/60 hover:text-magma'
+              }`}
+            >
+              {label}
+            </button>
+          );
+        })}
       </div>
 
       {q && (
         <p className="mb-8 text-sm text-ash/50">
-          {resultCount} result{resultCount === 1 ? '' : 's'} for &ldquo;{query}&rdquo;
+          {resultCount} {resultCount === 1 ? t('menu.resultFor') : t('menu.resultsFor')}{' '}
+          &ldquo;{query}&rdquo;
         </p>
       )}
 
       {resultCount === 0 ? (
         <div className="py-20 text-center">
-          <p className="kinetic text-3xl text-ash/70">No dishes found</p>
-          <p className="mt-2 text-sm text-ash/50">Try another search or clear the filter.</p>
+          <p className="kinetic text-3xl text-ash/70">{t('menu.none')}</p>
+          <p className="mt-2 text-sm text-ash/50">{t('menu.noneSub')}</p>
           <button
             onClick={() => {
               setQuery('');
@@ -106,7 +115,7 @@ export default function MenuExplorer({ menu }: { menu: MenuSection[] }) {
             data-cursor
             className="mt-5 rounded-full border border-magma/50 px-6 py-2 text-xs uppercase tracking-widest text-magma hover:bg-magma hover:text-obsidian"
           >
-            Reset
+            {t('menu.reset')}
           </button>
         </div>
       ) : (
@@ -114,8 +123,14 @@ export default function MenuExplorer({ menu }: { menu: MenuSection[] }) {
           {sections.map((sec) => (
           <div key={sec.title}>
             <div className="mb-6 flex items-baseline gap-4">
-              <h2 className="kinetic text-3xl text-magma-grad md:text-4xl">{sec.title}</h2>
-              {sec.note && <p className="text-sm italic text-ash/50">{sec.note}</p>}
+              <h2 className="kinetic text-3xl text-magma-grad md:text-4xl">
+                {(lang === 'es' && sec.titleEs) || sec.title}
+              </h2>
+              {(lang === 'es' ? sec.noteEs : sec.note) && (
+                <p className="text-sm italic text-ash/50">
+                  {lang === 'es' ? sec.noteEs : sec.note}
+                </p>
+              )}
             </div>
             <motion.div layout className="grid gap-4 md:grid-cols-2">
               <AnimatePresence mode="popLayout">
@@ -151,8 +166,10 @@ export default function MenuExplorer({ menu }: { menu: MenuSection[] }) {
                           <span className="kinetic text-lg text-magma-grad">${it.price}</span>
                         )}
                       </div>
-                      {it.desc && (
-                        <p className="mt-1 text-sm leading-snug text-ash/55">{it.desc}</p>
+                      {(lang === 'es' ? it.descEs || it.desc : it.desc) && (
+                        <p className="mt-1 text-sm leading-snug text-ash/55">
+                          {lang === 'es' ? it.descEs || it.desc : it.desc}
+                        </p>
                       )}
                       {canAdd && (
                         <div className="mt-3">
@@ -163,7 +180,7 @@ export default function MenuExplorer({ menu }: { menu: MenuSection[] }) {
                                 : 'border-magma/50 text-magma'
                             }`}
                           >
-                            {added ? '✓ Added to order' : '+ Add to order'}
+                            {added ? t('menu.added') : t('menu.add')}
                           </span>
                         </div>
                       )}

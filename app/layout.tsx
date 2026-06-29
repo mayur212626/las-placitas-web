@@ -14,6 +14,7 @@ import Footer from '@/components/Footer';
 import OrderModal from '@/components/OrderModal';
 import { CartProvider } from '@/components/cart/CartProvider';
 import CartDrawer from '@/components/cart/CartDrawer';
+import { LanguageProvider } from '@/components/i18n/LanguageProvider';
 
 const display = Anton({
   weight: '400',
@@ -77,21 +78,23 @@ export default function RootLayout({
       className={`${display.variable} ${body.variable}`}
     >
       <body className="grain">
-        <Preloader />
-        <SmoothScroll />
-        <ScrollProgress />
-        <Cursor />
-        <SparkTrail />
-        <ImageTrail />
-        <SoundToggle />
-        <BackToTop />
-        <OrderModal />
-        <CartProvider>
-          <Navbar />
-          <CartDrawer />
-          {children}
-          <Footer />
-        </CartProvider>
+        <LanguageProvider>
+          <Preloader />
+          <SmoothScroll />
+          <ScrollProgress />
+          <Cursor />
+          <SparkTrail />
+          <ImageTrail />
+          <SoundToggle />
+          <BackToTop />
+          <CartProvider>
+            <OrderModal />
+            <Navbar />
+            <CartDrawer />
+            {children}
+            <Footer />
+          </CartProvider>
+        </LanguageProvider>
       </body>
     </html>
   );

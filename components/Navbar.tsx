@@ -4,19 +4,22 @@ import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Logo from './Logo';
 import CartButton from './cart/CartButton';
+import LangToggle from './i18n/LangToggle';
+import { useLang } from './i18n/LanguageProvider';
 
 const links = [
-  { href: '/', label: 'Home' },
-  { href: '/#about', label: 'About' },
-  { href: '/menu', label: 'Menu' },
-  { href: '/specials', label: 'Specials' },
-  { href: '/locations', label: 'Contact' },
+  { href: '/', key: 'nav.home' },
+  { href: '/#about', key: 'nav.about' },
+  { href: '/menu', key: 'nav.menu' },
+  { href: '/specials', key: 'nav.specials' },
+  { href: '/locations', key: 'nav.contact' },
 ];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const { t } = useLang();
   const isActive = (href: string) =>
     href === '/' ? pathname === '/' : pathname.startsWith(href.split('#')[0]);
 
@@ -50,20 +53,21 @@ export default function Navbar() {
                   isActive(l.href) ? 'text-magma after:w-full' : 'after:w-0'
                 }`}
               >
-                {l.label}
+                {t(l.key)}
               </a>
             </li>
           ))}
         </ul>
 
         <div className="flex items-center gap-3">
+          <LangToggle className="hidden sm:flex" />
           <CartButton />
           <a
             href="#"
             data-order
             className="hidden rounded-full border border-magma/60 px-5 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-magma transition-colors hover:bg-magma hover:text-obsidian md:inline-block"
           >
-            Order
+            {t('nav.order')}
           </a>
         </div>
 
@@ -81,10 +85,13 @@ export default function Navbar() {
           {links.map((l) => (
             <li key={l.href}>
               <a href={l.href} onClick={() => setOpen(false)} className="block py-2 hover:text-magma">
-                {l.label}
+                {t(l.key)}
               </a>
             </li>
           ))}
+          <li className="pt-2">
+            <LangToggle />
+          </li>
         </ul>
       )}
     </header>

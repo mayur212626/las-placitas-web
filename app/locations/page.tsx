@@ -4,6 +4,7 @@ import Logo from '@/components/Logo';
 import Reveal from '@/components/Reveal';
 import Tilt from '@/components/motion/Tilt';
 import Magnetic from '@/components/motion/Magnetic';
+import T from '@/components/i18n/T';
 import { locations, delivery, events } from '@/lib/data';
 
 export const metadata: Metadata = {
@@ -15,9 +16,9 @@ export default function LocationsPage() {
   return (
     <main className="min-h-screen overflow-x-hidden pb-28 pt-32">
       <div className="container-x">
-        <p className="text-xs uppercase tracking-[0.4em] text-magma">Contact</p>
+        <p className="text-xs uppercase tracking-[0.4em] text-magma"><T k="loc.kicker" /></p>
         <h1 className="mt-3 kinetic text-6xl text-ash glow-magma md:text-8xl">
-          Two <span className="text-magma-grad">DC</span> Locations
+          <T k="loc.title1" /> <span className="text-magma-grad">DC</span> <T k="loc.title2" />
         </h1>
 
         <div className="mt-12">
@@ -68,7 +69,7 @@ export default function LocationsPage() {
         </div>
 
         <div className="mt-12 flex flex-wrap items-center justify-center gap-3 text-center">
-          <span className="text-xs uppercase tracking-widest text-ash/50">Catering &amp; events:</span>
+          <span className="text-xs uppercase tracking-widest text-ash/50"><T k="loc.catering" /></span>
           {events.map((e) => (
             <span key={e} className="rounded-full bg-magma/10 px-3 py-1 text-xs uppercase tracking-widest text-magma">
               {e}
@@ -82,7 +83,7 @@ export default function LocationsPage() {
             data-order
             className="inline-block rounded-full bg-magma px-10 py-4 text-sm font-semibold uppercase tracking-widest text-obsidian"
           >
-            Reserve a Table
+            <T k="menu.reserve" />
           </Magnetic>
         </div>
       </div>

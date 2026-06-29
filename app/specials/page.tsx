@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import DishCarousel from '@/components/DishCarousel';
 import Reveal from '@/components/Reveal';
 import Magnetic from '@/components/motion/Magnetic';
+import T from '@/components/i18n/T';
 import { margaritas, drinks } from '@/lib/data';
 
 export const metadata: Metadata = {
@@ -14,7 +15,7 @@ function PriceList({
   price,
   items,
 }: {
-  title: string;
+  title: React.ReactNode;
   price?: string;
   items: string[];
 }) {
@@ -41,9 +42,9 @@ export default function SpecialsPage() {
   return (
     <main className="min-h-screen overflow-x-hidden pb-28 pt-32">
       <div className="container-x">
-        <p className="text-xs uppercase tracking-[0.4em] text-magma">Specials &amp; Drinks</p>
+        <p className="text-xs uppercase tracking-[0.4em] text-magma"><T k="sp.kicker" /></p>
         <h1 className="mt-3 kinetic text-6xl text-ash glow-magma md:text-8xl">
-          Homemade <span className="text-magma-grad">Margaritas</span>
+          <T k="sp.title1" /> <span className="text-magma-grad"><T k="sp.title2" /></span>
         </h1>
 
         <div className="mt-14">
@@ -51,7 +52,7 @@ export default function SpecialsPage() {
         </div>
 
         <div className="mt-10 flex flex-wrap items-center gap-3">
-          <span className="text-xs uppercase tracking-widest text-ash/50">All one price</span>
+          <span className="text-xs uppercase tracking-widest text-ash/50"><T k="sp.allOne" /></span>
           <span className="kinetic text-3xl text-magma-grad">${drinks.margaritaPrice}</span>
           <div className="flex flex-wrap gap-2">
             {drinks.margaritas.map((m) => (
@@ -67,16 +68,16 @@ export default function SpecialsPage() {
 
         <div className="mt-16 grid gap-6 md:grid-cols-2">
           <Reveal>
-            <PriceList title="Beer" price={drinks.beerPrice} items={drinks.beer} />
+            <PriceList title={<T k="sp.beer" />} price={drinks.beerPrice} items={drinks.beer} />
           </Reveal>
           <Reveal delay={80}>
-            <PriceList title="Mixed Drinks" price={drinks.mixedPrice} items={drinks.mixed} />
+            <PriceList title={<T k="sp.mixed" />} price={drinks.mixedPrice} items={drinks.mixed} />
           </Reveal>
           <Reveal>
-            <PriceList title="Frozen Daiquiris" price={drinks.frozenPrice} items={drinks.frozen} />
+            <PriceList title={<T k="sp.frozen" />} price={drinks.frozenPrice} items={drinks.frozen} />
           </Reveal>
           <Reveal delay={80}>
-            <PriceList title="Soft Drinks & Juices" price={drinks.softPrice} items={drinks.soft} />
+            <PriceList title={<T k="sp.soft" />} price={drinks.softPrice} items={drinks.soft} />
           </Reveal>
         </div>
 
@@ -94,13 +95,13 @@ export default function SpecialsPage() {
             data-order
             className="inline-block rounded-full bg-magma px-8 py-3 text-sm font-semibold uppercase tracking-widest text-obsidian"
           >
-            Reserve a Table
+            <T k="menu.reserve" />
           </Magnetic>
           <Magnetic
             href="/menu"
             className="inline-block rounded-full border border-ash/30 px-8 py-3 text-sm uppercase tracking-widest text-ash"
           >
-            Back to Menu
+            <T k="sp.back" />
           </Magnetic>
         </div>
       </div>

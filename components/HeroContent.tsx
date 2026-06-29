@@ -4,9 +4,11 @@ import { useEffect, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import AnimatedHeading from './motion/AnimatedHeading';
 import Magnetic from './motion/Magnetic';
+import { useLang } from './i18n/LanguageProvider';
 
 /** Hero text overlay that lifts + fades away as the camera dives into the crater. */
 export default function HeroContent({ since }: { since: number }) {
+  const { t, lang } = useLang();
   const { scrollY } = useScroll();
   const [vh, setVh] = useState(800);
   useEffect(() => {
@@ -35,11 +37,11 @@ export default function HeroContent({ since }: { since: number }) {
         </span>
         <span className="h-px w-8 shrink-0 bg-gradient-to-r from-magma to-transparent" />
         <span className="font-body text-[10px] font-semibold uppercase tracking-[0.32em] text-ash/85 md:text-xs md:tracking-[0.4em]">
-          Fire-Born Kitchen
+          {t('hero.kicker1')}
           <span className="mx-2 text-magma/80">/</span>
-          Mexican &amp; Salvadoran
+          {t('hero.kicker2')}
           <span className="mx-2 text-magma/80">/</span>
-          <span className="text-magma">Est. {since}</span>
+          <span className="text-magma">{t('hero.est')}</span>
         </span>
       </div>
 
@@ -50,8 +52,9 @@ export default function HeroContent({ since }: { since: number }) {
 
       <div className="mt-8 grid items-end gap-8 md:grid-cols-[1fr_auto]">
         <AnimatedHeading
-          lines={['Born of fire', 'and tradition.']}
-          accentWords={['fire']}
+          key={lang}
+          lines={[t('hero.sub1'), t('hero.sub2')]}
+          accentWords={[lang === 'es' ? 'fuego' : 'fire']}
           delay={0.3}
           className="kinetic text-3xl text-ash/90 md:text-5xl"
         />
@@ -60,13 +63,13 @@ export default function HeroContent({ since }: { since: number }) {
             href="#menu"
             className="inline-block rounded-full bg-magma px-8 py-3 text-sm font-semibold uppercase tracking-widest text-obsidian shadow-lg shadow-magma/30"
           >
-            View Menu
+            {t('hero.viewMenu')}
           </Magnetic>
           <Magnetic
             href="#locations"
             className="inline-block rounded-full border border-ash/30 px-8 py-3 text-sm uppercase tracking-widest text-ash"
           >
-            Find Us
+            {t('hero.findUs')}
           </Magnetic>
         </div>
       </div>

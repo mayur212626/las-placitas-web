@@ -3,9 +3,11 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { locations } from '@/lib/data';
+import { useLang } from './i18n/LanguageProvider';
 
 /** Reservation/order modal opened by any element with a [data-order] attribute. */
 export default function OrderModal() {
+  const { t } = useLang();
   const [open, setOpen] = useState(false);
   const [sent, setSent] = useState(false);
 
@@ -63,8 +65,8 @@ export default function OrderModal() {
 
             {!sent ? (
               <>
-                <p className="text-xs uppercase tracking-[0.35em] text-magma">Reserve a table</p>
-                <h3 className="mt-2 kinetic text-4xl text-ash">Book Las Placitas</h3>
+                <p className="text-xs uppercase tracking-[0.35em] text-magma">{t('order.kicker')}</p>
+                <h3 className="mt-2 kinetic text-4xl text-ash">{t('order.title')}</h3>
                 <form
                   className="mt-6 grid gap-4 sm:grid-cols-2"
                   onSubmit={(e) => {
@@ -72,16 +74,19 @@ export default function OrderModal() {
                     setSent(true);
                   }}
                 >
-                  <input required placeholder="Name" className={inp} />
-                  <input required placeholder="Phone" className={inp} />
+                  <input required placeholder={t('order.name')} className={inp} />
+                  <input required placeholder={t('order.phone')} className={inp} />
                   <select className={inp} defaultValue={locations[0].name}>
                     {locations.map((l) => (
                       <option key={l.id}>{l.name}</option>
                     ))}
                   </select>
-                  <select className={inp} defaultValue="2 guests">
-                    {['2 guests', '4 guests', '6 guests', '8+ guests'].map((g) => (
-                      <option key={g}>{g}</option>
+                  <select className={inp} defaultValue={`2 ${t('order.guests')}`}>
+                    {[2, 4, 6, 8].map((g) => (
+                      <option key={g}>
+                        {g}
+                        {g === 8 ? '+' : ''} {t('order.guests')}
+                      </option>
                     ))}
                   </select>
                   <input type="date" className={`${inp} sm:col-span-2`} />
@@ -90,7 +95,7 @@ export default function OrderModal() {
                     data-cursor
                     className="sm:col-span-2 rounded-full bg-magma px-6 py-3 text-sm font-semibold uppercase tracking-widest text-obsidian transition-transform hover:scale-[1.02]"
                   >
-                    Request Reservation
+                    {t('order.request')}
                   </button>
                 </form>
               </>
@@ -99,16 +104,14 @@ export default function OrderModal() {
                 <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-magma/15 text-3xl text-magma">
                   ✓
                 </div>
-                <h3 className="kinetic text-3xl text-ash">¡Gracias!</h3>
-                <p className="mt-2 text-ash/65">
-                  Request received. We&rsquo;ll call to confirm your table.
-                </p>
+                <h3 className="kinetic text-3xl text-ash">{t('order.thanks')}</h3>
+                <p className="mt-2 text-ash/65">{t('order.confirm')}</p>
                 <button
                   onClick={() => setOpen(false)}
                   data-cursor
                   className="mt-6 rounded-full border border-ash/30 px-6 py-2 text-sm uppercase tracking-widest text-ash hover:border-magma hover:text-magma"
                 >
-                  Done
+                  {t('order.done')}
                 </button>
               </div>
             )}

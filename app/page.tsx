@@ -1,3 +1,5 @@
+'use client';
+
 import HeroCanvas from '@/components/HeroCanvas';
 import DishCarousel from '@/components/DishCarousel';
 import FoodArt from '@/components/FoodArt';
@@ -13,6 +15,7 @@ import Parallax from '@/components/motion/Parallax';
 import ScrambleText from '@/components/motion/ScrambleText';
 import HeatShimmer from '@/components/motion/HeatShimmer';
 import VelocitySkew from '@/components/motion/VelocitySkew';
+import { useLang } from '@/components/i18n/LanguageProvider';
 import {
   brand,
   locations,
@@ -26,6 +29,7 @@ import {
 } from '@/lib/data';
 
 export default function Home() {
+  const { t, lang } = useLang();
   return (
     <main id="home" className="relative overflow-x-hidden">
       {/* ================= CINEMATIC HERO (pinned dive) ================= */}
@@ -58,15 +62,15 @@ export default function Home() {
       <section id="about" className="relative py-32">
         <div className="container-x grid items-center gap-16 md:grid-cols-2">
           <div>
-            <p className="text-xs uppercase tracking-[0.4em] text-magma">It&rsquo;s our passion</p>
+            <p className="text-xs uppercase tracking-[0.4em] text-magma">{t('about.kicker')}</p>
             <h2 className="mt-4 kinetic text-5xl text-ash md:text-7xl">
-              A taste of <span className="text-magma-grad">two homelands</span>
+              {t('about.title1')} <span className="text-magma-grad">{t('about.title2')}</span>
             </h2>
-            <p className="mt-6 max-w-lg leading-relaxed text-ash/65">{brand.blurb}</p>
+            <p className="mt-6 max-w-lg leading-relaxed text-ash/65">{t('about.blurb')}</p>
             <div className="mt-12 grid grid-cols-3 gap-6">
-              <Stat value={brand.yearsOnHill} suffix="+" label="Years on the Hill" />
-              <Stat value={2} label="DC Locations" />
-              <Stat value={brand.since} label="Serving since" />
+              <Stat value={brand.yearsOnHill} suffix="+" label={t('stat.years')} />
+              <Stat value={2} label={t('stat.locations')} />
+              <Stat value={brand.since} label={t('stat.since')} />
             </div>
           </div>
           <Parallax speed={60} className="relative mx-auto aspect-square w-full max-w-md">
@@ -84,12 +88,10 @@ export default function Home() {
         <div className="container-x">
           <div className="mb-16 flex flex-wrap items-end justify-between gap-4">
             <h2 className="kinetic text-5xl text-ash md:text-7xl">
-              Featured{' '}
-              <ScrambleText text="Delicacies" className="text-magma-grad" />
+              {t('featured.word1')}{' '}
+              <ScrambleText key={lang} text={t('featured.word2')} className="text-magma-grad" />
             </h2>
-            <p className="max-w-xs text-sm text-ash/50">
-              Freshest ingredients, daily. Touched by fire, plated with pride.
-            </p>
+            <p className="max-w-xs text-sm text-ash/50">{t('featured.sub')}</p>
           </div>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {featured.map((f, idx) => (
@@ -121,19 +123,21 @@ export default function Home() {
         <HorizontalMenu panels={menuPanels} />
       </div>
       <p className="container-x -mt-10 mb-24 text-center text-xs text-ash/40">
-        Full menu in-store · 3.8% cash discount · 18% gratuity on dine-in
+        {t('menu.note')}
       </p>
 
       {/* ================= SPECIALS ================= */}
       <section id="specials" className="bg-coal py-28">
         <div className="container-x">
           <h2 className="mb-14 text-center kinetic text-5xl text-ash md:text-7xl">
-            Some <ScrambleText text="Awesome" className="text-magma-grad" /> Dishes
+            {t('specials.awesome1')}{' '}
+            <ScrambleText key={lang} text={t('specials.awesome2')} className="text-magma-grad" />{' '}
+            {t('specials.awesome3')}
           </h2>
           <DishCarousel items={awesomeDishes} variant="navy" />
 
           <h2 className="mb-14 mt-28 text-center kinetic text-5xl text-magma-grad md:text-7xl glow-magma">
-            Homemade Margaritas
+            {t('specials.margs')}
           </h2>
           <DishCarousel items={margaritas} variant="jungle" drink />
         </div>
@@ -143,9 +147,10 @@ export default function Home() {
       <section className="py-28">
         <div className="container-x">
           <div className="mb-14 text-center">
-            <p className="text-xs uppercase tracking-[0.4em] text-magma">Fresh chips &amp; salsa daily</p>
+            <p className="text-xs uppercase tracking-[0.4em] text-magma">{t('gallery.kicker')}</p>
             <h2 className="mt-3 kinetic text-5xl text-ash md:text-7xl">
-              From the <ScrambleText text="kitchen" className="text-magma-grad" />
+              {t('gallery.title1')}{' '}
+              <ScrambleText key={lang} text={t('gallery.title2')} className="text-magma-grad" />
             </h2>
           </div>
           <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
@@ -175,10 +180,10 @@ export default function Home() {
       <section id="locations" className="py-28">
         <div className="container-x">
           <div className="mb-16 text-center">
-            <p className="text-xs uppercase tracking-[0.4em] text-magma">Contact</p>
+            <p className="text-xs uppercase tracking-[0.4em] text-magma">{t('loc.kicker')}</p>
             <h2 className="mt-3 kinetic text-5xl text-ash md:text-7xl">
-              Two <span className="text-magma-grad">DC</span>{' '}
-              <ScrambleText text="Locations" />
+              {t('loc.title1')} <span className="text-magma-grad">DC</span>{' '}
+              <ScrambleText key={lang} text={t('loc.title2')} />
             </h2>
           </div>
           <div className="grid gap-8 md:grid-cols-2">
@@ -224,7 +229,7 @@ export default function Home() {
             ))}
           </div>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-            <span className="text-xs uppercase tracking-widest text-ash/50">Catering &amp; events:</span>
+            <span className="text-xs uppercase tracking-widest text-ash/50">{t('loc.catering')}</span>
             {events.map((e) => (
               <span key={e} className="rounded-full bg-magma/10 px-3 py-1 text-xs uppercase tracking-widest text-magma">
                 {e}
@@ -239,24 +244,22 @@ export default function Home() {
         <div className="pointer-events-none absolute left-1/2 top-1/2 h-[40vmax] w-[40vmax] -translate-x-1/2 -translate-y-1/2 rounded-full bg-magma/15 blur-[120px]" />
         <div className="container-x relative">
           <h2 className="kinetic text-[22vw] leading-none text-magma-grad glow-magma md:text-[16vw]">
-            Let&rsquo;s Eat
+            {t('cta.title')}
           </h2>
-          <p className="mx-auto mt-6 max-w-lg text-ash/65">
-            Thank you to all who&rsquo;ve supported us over {brand.yearsOnHill} years on Capitol Hill.
-          </p>
+          <p className="mx-auto mt-6 max-w-lg text-ash/65">{t('cta.thanks')}</p>
           <div className="mt-10 flex flex-wrap justify-center gap-4">
             <Magnetic
               href="#"
               data-order
               className="inline-block rounded-full bg-magma px-10 py-4 text-sm font-semibold uppercase tracking-widest text-obsidian shadow-lg shadow-magma/30"
             >
-              Order Now
+              {t('cta.order')}
             </Magnetic>
             <Magnetic
               href="/menu"
               className="inline-block rounded-full border border-ash/30 px-10 py-4 text-sm uppercase tracking-widest text-ash"
             >
-              See the Menu
+              {t('cta.seeMenu')}
             </Magnetic>
           </div>
         </div>

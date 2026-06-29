@@ -3,9 +3,11 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCart } from './CartProvider';
+import { useLang } from '../i18n/LanguageProvider';
 
 export default function CartDrawer() {
   const { items, total, count, isOpen, close, setQty, remove, clear } = useCart();
+  const { t } = useLang();
   const [placed, setPlaced] = useState(false);
 
   const checkout = () => {
@@ -37,7 +39,7 @@ export default function CartDrawer() {
           >
             <div className="flex items-center justify-between border-b border-white/10 p-6">
               <h2 className="kinetic text-2xl text-ash">
-                Your Order{' '}
+                {t('cart.title')}{' '}
                 {count > 0 && <span className="text-magma-grad">({count})</span>}
               </h2>
               <button
@@ -55,19 +57,19 @@ export default function CartDrawer() {
                 <div className="flex h-16 w-16 items-center justify-center rounded-full bg-magma/15 text-3xl text-magma">
                   ✓
                 </div>
-                <h3 className="kinetic text-3xl text-ash">¡Order placed!</h3>
-                <p className="text-ash/60">Thanks. We&rsquo;ll have it ready for you.</p>
+                <h3 className="kinetic text-3xl text-ash">{t('cart.placed')}</h3>
+                <p className="text-ash/60">{t('cart.placedSub')}</p>
               </div>
             ) : items.length === 0 ? (
               <div className="flex flex-1 flex-col items-center justify-center gap-3 p-8 text-center">
-                <p className="kinetic text-2xl text-ash/70">Your cart is empty</p>
-                <p className="text-sm text-ash/50">Add some dishes from the menu to get started.</p>
+                <p className="kinetic text-2xl text-ash/70">{t('cart.empty')}</p>
+                <p className="text-sm text-ash/50">{t('cart.emptySub')}</p>
                 <a
                   href="/menu"
                   onClick={close}
                   className="mt-2 rounded-full border border-magma/50 px-6 py-2 text-xs uppercase tracking-widest text-magma hover:bg-magma hover:text-obsidian"
                 >
-                  Browse Menu
+                  {t('cart.browse')}
                 </a>
               </div>
             ) : (
@@ -112,7 +114,7 @@ export default function CartDrawer() {
 
                 <div className="border-t border-white/10 p-6">
                   <div className="mb-4 flex items-baseline justify-between">
-                    <span className="text-sm uppercase tracking-widest text-ash/60">Subtotal</span>
+                    <span className="text-sm uppercase tracking-widest text-ash/60">{t('cart.subtotal')}</span>
                     <span className="kinetic text-3xl text-magma-grad">${total.toFixed(2)}</span>
                   </div>
                   <button
@@ -120,14 +122,14 @@ export default function CartDrawer() {
                     data-cursor
                     className="w-full rounded-full bg-magma py-3 text-sm font-semibold uppercase tracking-widest text-obsidian transition-transform hover:scale-[1.02]"
                   >
-                    Checkout
+                    {t('cart.checkout')}
                   </button>
                   <button
                     onClick={clear}
                     data-cursor
                     className="mt-3 w-full text-center text-xs uppercase tracking-widest text-ash/40 hover:text-blood"
                   >
-                    Clear cart
+                    {t('cart.clear')}
                   </button>
                 </div>
               </>
