@@ -18,7 +18,7 @@ export default function HorizontalMenu({ panels }: { panels: Panel[] }) {
   const x = useTransform(scrollYProgress, [0, 1], ['2%', `-${(panels.length - 1) * 78 + 4}%`]);
 
   return (
-    <section ref={ref} style={{ height: `${panels.length * 90}vh` }} className="relative">
+    <section ref={ref} style={{ height: `${panels.length * 60}vh` }} className="relative">
       <div className="sticky top-0 flex h-screen items-center overflow-hidden">
         {/* heading watermark */}
         <h2 className="pointer-events-none absolute left-6 top-16 z-0 kinetic text-outline text-[16vw] leading-none opacity-30">

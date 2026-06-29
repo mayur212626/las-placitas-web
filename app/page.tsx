@@ -33,7 +33,7 @@ export default function Home() {
   return (
     <main id="home" className="relative overflow-x-hidden">
       {/* ================= CINEMATIC HERO (pinned dive) ================= */}
-      <section className="relative h-[260vh]">
+      <section className="relative h-[200vh]">
         <div className="sticky top-0 h-screen overflow-hidden">
           <div className="absolute inset-0">
             <HeroCanvas />

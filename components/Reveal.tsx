@@ -25,7 +25,8 @@ export default function Reveal({
           io.disconnect();
         }
       },
-      { threshold: 0.15 }
+      // reveal ~220px before the block scrolls into view so there are no blank gaps
+      { threshold: 0, rootMargin: '0px 0px 220px 0px' }
     );
     io.observe(el);
     return () => io.disconnect();
@@ -35,8 +36,8 @@ export default function Reveal({
     <div
       ref={ref}
       style={{ transitionDelay: `${delay}ms` }}
-      className={`transition-all duration-700 ease-out ${
-        shown ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+      className={`transition-all duration-500 ease-out ${
+        shown ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
       } ${className}`}
     >
       {children}
