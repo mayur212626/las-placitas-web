@@ -26,8 +26,9 @@ export default function HeroContent({ since }: { since: number }) {
   return (
     <motion.div
       style={{ opacity, y, scale, filter: blur }}
-      className="container-x absolute bottom-16 left-1/2 z-10 -translate-x-1/2"
+      className="absolute inset-x-0 bottom-10 z-10 md:bottom-16"
     >
+      <div className="container-x">
       {/* editorial kicker */}
       <div className="mb-7 flex items-center gap-3">
         <span className="flex h-9 w-9 shrink-0 animate-glowPulse items-center justify-center rounded-full border border-magma/50 bg-magma/10 text-magma shadow-[0_0_20px_rgba(255,94,26,0.45)]">
@@ -72,6 +73,7 @@ export default function HeroContent({ since }: { since: number }) {
             {t('hero.findUs')}
           </Magnetic>
         </div>
+      </div>
       </div>
     </motion.div>
   );
