@@ -5,7 +5,6 @@ import SmoothScroll from '@/components/SmoothScroll';
 import ScrollProgress from '@/components/ScrollProgress';
 import Cursor from '@/components/Cursor';
 import SparkTrail from '@/components/SparkTrail';
-import ImageTrail from '@/components/ImageTrail';
 import SoundToggle from '@/components/SoundToggle';
 import BackToTop from '@/components/BackToTop';
 import Preloader from '@/components/Preloader';
@@ -84,7 +83,6 @@ export default function RootLayout({
           <ScrollProgress />
           <Cursor />
           <SparkTrail />
-          <ImageTrail />
           <SoundToggle />
           <BackToTop />
           <CartProvider>

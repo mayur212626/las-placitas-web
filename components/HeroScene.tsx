@@ -9,14 +9,7 @@ import {
   PresentationControls,
   AdaptiveDpr,
 } from '@react-three/drei';
-import {
-  EffectComposer,
-  Bloom,
-  ChromaticAberration,
-  Vignette,
-  Noise,
-} from '@react-three/postprocessing';
-import { BlendFunction } from 'postprocessing';
+import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
 import * as THREE from 'three';
 import Volcano from './Volcano';
 import LavaPlane from './LavaPlane';
@@ -83,7 +76,7 @@ function OrbitingPlate() {
   );
 }
 
-export default function HeroScene() {
+export default function HeroScene({ active = true }: { active?: boolean }) {
   const [lowPerf, setLowPerf] = useState(false);
   useEffect(() => {
     const m = window.matchMedia('(max-width: 768px)');
@@ -95,10 +88,11 @@ export default function HeroScene() {
 
   return (
     <Canvas
+      frameloop={active ? 'always' : 'never'}
       shadows={!lowPerf}
-      dpr={lowPerf ? [1, 1.5] : [1, 2]}
+      dpr={lowPerf ? [1, 1.5] : [1, 1.75]}
       camera={{ position: [0, 1.6, 8], fov: 40 }}
-      gl={{ antialias: true, alpha: false }}
+      gl={{ antialias: true, alpha: false, powerPreference: 'high-performance' }}
     >
       <color attach="background" args={['#0a0807']} />
       <fog attach="fog" args={['#0a0807', 16, 30]} />
@@ -138,14 +132,12 @@ export default function HeroScene() {
       {!lowPerf && (
         <EffectComposer>
           <Bloom
-            intensity={1.6}
-            luminanceThreshold={0.28}
+            intensity={1.5}
+            luminanceThreshold={0.3}
             luminanceSmoothing={0.9}
             mipmapBlur
           />
-          <ChromaticAberration offset={[0.0009, 0.0012]} radialModulation={false} modulationOffset={0} />
           <Vignette eskil={false} offset={0.25} darkness={0.85} />
-          <Noise premultiply blendFunction={BlendFunction.OVERLAY} opacity={0.25} />
         </EffectComposer>
       )}
 

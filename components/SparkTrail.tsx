@@ -49,11 +49,13 @@ export default function SparkTrail() {
           r: 1 + Math.random() * 2,
         });
       }
-      if (sparks.length > 260) sparks.splice(0, sparks.length - 260);
+      if (sparks.length > 160) sparks.splice(0, sparks.length - 160);
+      kick();
     };
-    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mousemove', onMove, { passive: true });
 
     let raf = 0;
+    let running = false;
     const loop = () => {
       ctx.clearRect(0, 0, cv.width, cv.height);
       ctx.globalCompositeOperation = 'lighter';
@@ -76,9 +78,19 @@ export default function SparkTrail() {
         ctx.fill();
       }
       ctx.globalAlpha = 1;
+      // stop the loop once everything has faded — no idle CPU burn
+      if (sparks.length === 0) {
+        running = false;
+        return;
+      }
       raf = requestAnimationFrame(loop);
     };
-    raf = requestAnimationFrame(loop);
+    function kick() {
+      if (!running) {
+        running = true;
+        raf = requestAnimationFrame(loop);
+      }
+    }
 
     return () => {
       cancelAnimationFrame(raf);
