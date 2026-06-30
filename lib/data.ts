@@ -40,42 +40,54 @@ export const events = ['Private Parties up to 100', 'Birthdays', 'Weddings', 'Qu
 import type { FoodKind } from '@/components/FoodArt';
 
 // Featured highlight cards (home "From the Coals"-style grid)
-export const featured: { name: string; desc: string; tag: string; kind: FoodKind }[] = [
+export const featured: {
+  name: string;
+  desc: string;
+  tag: string;
+  kind: FoodKind;
+  price: string;
+}[] = [
   {
     name: 'Mixed Nachos',
     desc: 'Chicken, Steak & Shrimp Nachos.',
     tag: 'Signature',
     kind: 'nachos',
+    price: '15.95',
   },
   {
     name: 'Lomo Saltado',
     desc: 'Grilled beef sautéed with onions, peppers, tomatoes & fries.',
     tag: 'Plate',
     kind: 'skillet',
+    price: '19.95',
   },
   {
     name: 'Pollo Asado',
     desc: 'Out of the oven roasted-chicken. Covered with sautéed onions.',
     tag: 'Salvadoran',
     kind: 'plate',
+    price: '18.95',
   },
   {
     name: 'Lomo Saltado de Pollo',
     desc: 'Chicken with sautéed onions, peppers, tomatoes & fries.',
     tag: 'Plate',
     kind: 'skillet',
+    price: '17.95',
   },
   {
     name: 'Mariscada',
     desc: 'A seafood combination of shrimp, scallops, mussels, clams, squid in a seafood broth.',
     tag: 'Mariscos',
     kind: 'soup',
+    price: '21.95',
   },
   {
     name: 'Carne Asada',
     desc: 'Tender beef steak with sautéed onions in our signature sauce. Served with rice and plantain.',
     tag: 'Signature',
     kind: 'steak',
+    price: '19.95',
   },
 ];
 

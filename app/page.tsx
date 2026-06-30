@@ -95,18 +95,22 @@ export default function Home() {
             {featured.map((f, idx) => (
               <Reveal key={f.name} delay={(idx % 3) * 90}>
                 <Tilt className="h-full">
-                  <article className="glass glitch h-full overflow-hidden rounded-2xl">
+                  <article className="glass glitch flex h-full flex-col overflow-hidden rounded-2xl">
                     <HeatShimmer className="aspect-[5/3] bg-coal">
                       <FoodArt kind={f.kind} accent="#ff5e1a" className="h-full w-full" />
                     </HeatShimmer>
-                    <div className="p-6">
+                    <div className="flex flex-1 flex-col p-6">
                       <div className="flex items-center justify-between gap-3">
                         <h3 className="kinetic text-2xl text-ash">{f.name}</h3>
                         <span className="rounded-full border border-magma/40 px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-magma">
                           {f.tag}
                         </span>
                       </div>
-                      <p className="mt-2 text-sm leading-relaxed text-ash/55">{f.desc}</p>
+                      <p className="mt-2 flex-1 text-sm leading-relaxed text-ash/55">{f.desc}</p>
+                      <div className="mt-4 flex items-center justify-between">
+                        <span className="kinetic text-2xl text-magma-grad">${f.price}</span>
+                        <AddToCart id={`featured-${f.name}`} name={f.name} price={f.price} />
+                      </div>
                     </div>
                   </article>
                 </Tilt>
