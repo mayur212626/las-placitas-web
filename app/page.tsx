@@ -6,8 +6,8 @@ import FoodArt from '@/components/FoodArt';
 import Reveal from '@/components/Reveal';
 import Logo from '@/components/Logo';
 import Marquee from '@/components/Marquee';
-import HorizontalMenu from '@/components/HorizontalMenu';
 import HeroContent from '@/components/HeroContent';
+import AddToCart from '@/components/cart/AddToCart';
 import Magnetic from '@/components/motion/Magnetic';
 import Tilt from '@/components/motion/Tilt';
 import Counter from '@/components/motion/Counter';
@@ -116,13 +116,49 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ================= MENU — HORIZONTAL PINNED ================= */}
-      <div id="menu">
-        <HorizontalMenu panels={menuPanels} />
-      </div>
-      <p className="container-x -mt-10 mb-24 text-center text-xs text-ash/40">
-        {t('menu.note')}
-      </p>
+      {/* ================= SIGNATURE DISHES ================= */}
+      <section id="menu" className="bg-coal py-28">
+        <div className="container-x">
+          <div className="mb-14 text-center">
+            <p className="text-xs uppercase tracking-[0.4em] text-magma">{t('sig.kicker')}</p>
+            <h2 className="mt-3 kinetic text-5xl text-ash md:text-7xl">
+              {t('sig.title1')} <span className="text-magma-grad">{t('sig.title2')}</span>
+            </h2>
+          </div>
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {menuPanels.map((p, idx) => (
+              <Reveal key={p.title} delay={(idx % 3) * 80}>
+                <Tilt className="h-full">
+                  <article className="glass glitch flex h-full flex-col overflow-hidden rounded-2xl">
+                    <HeatShimmer className="aspect-[5/3] bg-obsidian">
+                      <FoodArt kind={p.kind} accent={p.accent} className="h-full w-full" />
+                    </HeatShimmer>
+                    <div className="flex flex-1 flex-col p-6">
+                      <div className="flex items-start justify-between gap-3">
+                        <h3 className="kinetic text-2xl text-ash">{p.title}</h3>
+                        <span className="kinetic text-2xl text-magma-grad">${p.price}</span>
+                      </div>
+                      <p className="mt-2 flex-1 text-sm leading-relaxed text-ash/55">{p.desc}</p>
+                      <div className="mt-4">
+                        <AddToCart id={`signature-${p.title}`} name={p.title} price={p.price} />
+                      </div>
+                    </div>
+                  </article>
+                </Tilt>
+              </Reveal>
+            ))}
+          </div>
+          <div className="mt-12 text-center">
+            <Magnetic
+              href="/menu"
+              className="inline-block rounded-full border border-magma/50 px-8 py-3 text-sm font-semibold uppercase tracking-widest text-magma hover:bg-magma hover:text-obsidian"
+            >
+              {t('sig.viewFull')}
+            </Magnetic>
+          </div>
+          <p className="mt-10 text-center text-xs text-ash/40">{t('menu.note')}</p>
+        </div>
+      </section>
 
       {/* ================= SPECIALS ================= */}
       <section id="specials" className="bg-coal py-28">

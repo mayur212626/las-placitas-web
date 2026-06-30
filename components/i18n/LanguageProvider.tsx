@@ -120,6 +120,10 @@ const dict: Dict = {
   'foot.catering': { en: 'Catering available', es: 'Catering disponible' },
   'foot.rights': { en: 'All rights reserved', es: 'Todos los derechos reservados' },
   'menu.note': { en: 'Full menu in-store · 3.8% cash discount · 18% gratuity on dine-in', es: 'Menú completo en tienda · 3.8% descuento en efectivo · 18% propina al comer aquí' },
+  'sig.kicker': { en: 'Signature', es: 'Especialidades' },
+  'sig.title1': { en: 'House', es: 'Platos' },
+  'sig.title2': { en: 'Favorites', es: 'Estrella' },
+  'sig.viewFull': { en: 'View Full Menu', es: 'Ver Menú Completo' },
 };
 
 type Ctx = { lang: Lang; setLang: (l: Lang) => void; t: (key: string) => string };
