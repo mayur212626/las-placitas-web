@@ -81,6 +81,7 @@ body {
   opacity: 0;
   mix-blend-mode: screen;
   transition: opacity 0.2s;
+  pointer-events: none; /* never intercept clicks meant for card buttons */
 }
 .glitch:hover::before {
   opacity: 0.5;
