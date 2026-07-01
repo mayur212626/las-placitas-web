@@ -33,6 +33,19 @@ export const locations = [
 
 export const pressLogos = ['The Washington Post', 'Yelp', 'Google', 'Tripadvisor'];
 
+// Opening hours (24h), index 0 = Sunday ... 6 = Saturday. null = closed.
+export const hours: { open: number; close: number }[] = [
+  { open: 11, close: 21 }, // Sun
+  { open: 11, close: 22 }, // Mon
+  { open: 11, close: 22 }, // Tue
+  { open: 11, close: 22 }, // Wed
+  { open: 11, close: 22 }, // Thu
+  { open: 11, close: 23 }, // Fri
+  { open: 11, close: 23 }, // Sat
+];
+
+export const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
 export const delivery = ['Uber Eats', 'DoorDash', 'Grubhub'];
 
 export const events = ['Private Parties up to 100', 'Birthdays', 'Weddings', 'Quinces'];

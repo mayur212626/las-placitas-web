@@ -5,7 +5,14 @@ import Reveal from '@/components/Reveal';
 import Tilt from '@/components/motion/Tilt';
 import Magnetic from '@/components/motion/Magnetic';
 import T from '@/components/i18n/T';
-import { locations, delivery, events } from '@/lib/data';
+import OpenStatus from '@/components/OpenStatus';
+import { locations, delivery, events, hours, dayNames } from '@/lib/data';
+
+function fmt(h: number) {
+  const p = h >= 12 ? 'PM' : 'AM';
+  const hr = h % 12 === 0 ? 12 : h % 12;
+  return `${hr}${p}`;
+}
 
 export const metadata: Metadata = {
   title: 'Locations & Contact — Las Placitas · Washington, DC',
@@ -52,6 +59,22 @@ export default function LocationsPage() {
                   >
                     {loc.phone}
                   </a>
+                  <div className="mt-4">
+                    <OpenStatus />
+                  </div>
+                  <div className="mt-5 border-t border-white/10 pt-4">
+                    <p className="mb-2 text-xs uppercase tracking-[0.3em] text-magma">
+                      <T k="hours.title" />
+                    </p>
+                    <ul className="space-y-1 text-sm text-ash/60">
+                      {hours.map((hr, d) => (
+                        <li key={d} className="flex justify-between">
+                          <span>{dayNames[d]}</span>
+                          <span>{fmt(hr.open)} – {fmt(hr.close)}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                   <div className="mt-6 flex flex-wrap gap-2">
                     {delivery.map((d) => (
                       <span

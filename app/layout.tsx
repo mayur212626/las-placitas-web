@@ -14,6 +14,8 @@ import OrderModal from '@/components/OrderModal';
 import { CartProvider } from '@/components/cart/CartProvider';
 import CartDrawer from '@/components/cart/CartDrawer';
 import { LanguageProvider } from '@/components/i18n/LanguageProvider';
+import StructuredData from '@/components/StructuredData';
+import ServiceWorkerRegister from '@/components/ServiceWorkerRegister';
 
 const display = Anton({
   weight: '400',
@@ -77,6 +79,8 @@ export default function RootLayout({
       className={`${display.variable} ${body.variable}`}
     >
       <body className="grain">
+        <StructuredData />
+        <ServiceWorkerRegister />
         <LanguageProvider>
           <Preloader />
           <SmoothScroll />

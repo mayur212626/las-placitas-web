@@ -124,6 +124,22 @@ const dict: Dict = {
   'sig.title1': { en: 'House', es: 'Platos' },
   'sig.title2': { en: 'Favorites', es: 'Estrella' },
   'sig.viewFull': { en: 'View Full Menu', es: 'Ver Menú Completo' },
+  'hours.open': { en: 'Open now', es: 'Abierto ahora' },
+  'hours.closed': { en: 'Closed', es: 'Cerrado' },
+  'hours.until': { en: 'until', es: 'hasta las' },
+  'hours.opens': { en: 'opens', es: 'abre a las' },
+  'hours.title': { en: 'Hours', es: 'Horario' },
+  'co.pickup': { en: 'Pickup location', es: 'Lugar de recogida' },
+  'co.time': { en: 'Pickup time', es: 'Hora de recogida' },
+  'co.asap': { en: 'ASAP (20–30 min)', es: 'Cuanto antes (20–30 min)' },
+  'co.tip': { en: 'Tip', es: 'Propina' },
+  'co.tax': { en: 'Tax', es: 'Impuesto' },
+  'co.total': { en: 'Total', es: 'Total' },
+  'co.place': { en: 'Place Order', es: 'Realizar Pedido' },
+  'co.back': { en: 'Back', es: 'Atrás' },
+  'co.checkout': { en: 'Checkout', es: 'Finalizar' },
+  'co.orderNo': { en: 'Order number', es: 'Número de pedido' },
+  'co.confirm': { en: "We'll have it ready for pickup. Show this number at the counter.", es: 'Lo tendremos listo para recoger. Muestra este número en el mostrador.' },
 };
 
 type Ctx = { lang: Lang; setLang: (l: Lang) => void; t: (key: string) => string };
