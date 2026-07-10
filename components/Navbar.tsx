@@ -60,6 +60,18 @@ export default function Navbar() {
         </ul>
 
         <div className="flex items-center gap-3">
+          <button
+            onClick={() => window.dispatchEvent(new Event('lp:palette'))}
+            data-cursor
+            aria-label="Search (Ctrl+K)"
+            className="hidden h-10 items-center gap-2 rounded-full border border-ash/20 px-3.5 text-ash/60 transition-colors hover:border-magma hover:text-magma lg:flex"
+          >
+            <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="11" cy="11" r="7" />
+              <path d="M21 21l-4.3-4.3" strokeLinecap="round" />
+            </svg>
+            <kbd className="text-[10px] tracking-widest">Ctrl K</kbd>
+          </button>
           <LangToggle className="hidden sm:flex" />
           <CartButton />
           <a

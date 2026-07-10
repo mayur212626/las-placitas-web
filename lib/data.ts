@@ -172,7 +172,16 @@ export const gallery: { name: string; kind: FoodKind; accent: string }[] = [
 ];
 
 // Full menu — abbreviated to the strongest sections for the site.
-export type Item = { name: string; price?: string; desc?: string; descEs?: string };
+export type DietTag = 'veg' | 'seafood';
+export type Item = {
+  name: string;
+  price?: string;
+  desc?: string;
+  descEs?: string;
+  tags?: DietTag[];
+  /** 0 = mild … 3 = hot */
+  spice?: number;
+};
 export type MenuSection = {
   title: string;
   titleEs?: string;
@@ -186,14 +195,14 @@ export const menu: MenuSection[] = [
     title: 'Appetizers',
     titleEs: 'Aperitivos',
     items: [
-      { name: 'Chile Con Queso Dip', price: '8.95', desc: 'House made mildly spicy creamy cheese dip with corn tortilla chips.', descEs: 'Salsa cremosa de queso, ligeramente picante, con totopos de maíz.' },
-      { name: 'Fresh Guacamole Dip', price: '11.95', desc: 'Mashed avocados with tomato, onion, lime juice and spices.', descEs: 'Aguacate machacado con tomate, cebolla, jugo de limón y especias.' },
+      { name: 'Chile Con Queso Dip', price: '8.95', desc: 'House made mildly spicy creamy cheese dip with corn tortilla chips.', descEs: 'Salsa cremosa de queso, ligeramente picante, con totopos de maíz.', tags: ['veg'], spice: 1 },
+      { name: 'Fresh Guacamole Dip', price: '11.95', desc: 'Mashed avocados with tomato, onion, lime juice and spices.', descEs: 'Aguacate machacado con tomate, cebolla, jugo de limón y especias.', tags: ['veg'] },
       { name: 'Yuca Con Chicharrón', price: '12.95', desc: 'Fried Spanish root and marinated pork morsels with house made curtido.', descEs: 'Yuca frita y trozos de cerdo marinado con curtido de la casa.' },
       { name: 'Taquitos Dorados', price: '13.95', desc: 'Three crispy rolled corn tortillas, beef or chicken. Pico, guacamole, sour cream.', descEs: 'Tres tacos dorados de maíz, res o pollo. Pico, guacamole y crema.' },
-      { name: 'Pupusas', price: '3.25', desc: 'Handmade corn flour tortilla — pork & cheese, bean & cheese, or cheese. With curtido.', descEs: 'Tortilla de maíz hecha a mano: cerdo y queso, frijol y queso, o queso. Con curtido.' },
-      { name: 'Ceviche Mixta', price: '13.95', desc: 'Fresh fish and shrimp marinated in lemon-lime juices and spices. Served chilled.', descEs: 'Pescado y camarón fresco marinados en limón y especias. Servido frío.' },
-      { name: 'Camarones al Ajillo', price: '12.95', desc: 'Shrimps sautéed in white wine garlic butter sauce.', descEs: 'Camarones salteados en salsa de mantequilla, ajo y vino blanco.' },
-      { name: 'Mejillones Marineros', price: '13.95', desc: 'Mussels steamed in white wine garlic ginger butter sauce.', descEs: 'Mejillones al vapor en salsa de mantequilla, ajo, jengibre y vino blanco.' },
+      { name: 'Pupusas', price: '3.25', desc: 'Handmade corn flour tortilla — pork & cheese, bean & cheese, or cheese. With curtido.', descEs: 'Tortilla de maíz hecha a mano: cerdo y queso, frijol y queso, o queso. Con curtido.', tags: ['veg'] },
+      { name: 'Ceviche Mixta', price: '13.95', desc: 'Fresh fish and shrimp marinated in lemon-lime juices and spices. Served chilled.', descEs: 'Pescado y camarón fresco marinados en limón y especias. Servido frío.', tags: ['seafood'], spice: 1 },
+      { name: 'Camarones al Ajillo', price: '12.95', desc: 'Shrimps sautéed in white wine garlic butter sauce.', descEs: 'Camarones salteados en salsa de mantequilla, ajo y vino blanco.', tags: ['seafood'] },
+      { name: 'Mejillones Marineros', price: '13.95', desc: 'Mussels steamed in white wine garlic ginger butter sauce.', descEs: 'Mejillones al vapor en salsa de mantequilla, ajo, jengibre y vino blanco.', tags: ['seafood'] },
     ],
   },
   {
@@ -205,9 +214,9 @@ export const menu: MenuSection[] = [
       { name: 'El Típico', price: '17.95', desc: 'Pork & cheese pupusa, chicken tamale, fried plantains, yucca, sour cream, curtido.', descEs: 'Pupusa de cerdo y queso, tamal de pollo, plátanos fritos, yuca, crema y curtido.' },
       { name: 'Pollo Ranchero', price: '18.95', desc: 'Salvadoran roasted half chicken, mixed veggies, signature fajita sauce.', descEs: 'Medio pollo asado al estilo salvadoreño, verduras mixtas, salsa fajita de la casa.' },
       { name: 'Carne Asada', price: '19.95', desc: 'Grilled skirt steak topped with sautéed onions and fried plantains.', descEs: 'Bistec de falda a la parrilla con cebollas salteadas y plátanos fritos.' },
-      { name: 'Lomo Saltado', price: '19.95', desc: 'Grilled steak, fajita veggies, jalapeños and fried potatoes.', descEs: 'Bistec a la parrilla, verduras fajita, jalapeños y papas fritas.' },
+      { name: 'Lomo Saltado', price: '19.95', desc: 'Grilled steak, fajita veggies, jalapeños and fried potatoes.', descEs: 'Bistec a la parrilla, verduras fajita, jalapeños y papas fritas.', spice: 2 },
       { name: 'Las Placitas Steak', price: '21.95', desc: 'Grilled NY steak topped with veggies in a garlic butter sauce.', descEs: 'Bistec NY a la parrilla con verduras en salsa de mantequilla y ajo.' },
-      { name: 'Las Placitas Sampler', price: '22.95', desc: 'Sliced steak, chicken & shrimp, sautéed veggies, fajita sauce, pork & cheese pupusa.', descEs: 'Bistec, pollo y camarón en rodajas, verduras salteadas, salsa fajita y pupusa de cerdo y queso.' },
+      { name: 'Las Placitas Sampler', price: '22.95', desc: 'Sliced steak, chicken & shrimp, sautéed veggies, fajita sauce, pork & cheese pupusa.', descEs: 'Bistec, pollo y camarón en rodajas, verduras salteadas, salsa fajita y pupusa de cerdo y queso.', tags: ['seafood'] },
     ],
   },
   {
@@ -216,12 +225,12 @@ export const menu: MenuSection[] = [
     note: 'Served with rice and black beans.',
     noteEs: 'Servido con arroz y frijoles negros.',
     items: [
-      { name: 'Mojarra Frita', price: '18.95', desc: 'Whole fried fish, sautéed shrimp & veggies in salsa roja. Side salad & tortillas.', descEs: 'Pescado entero frito, camarón y verduras en salsa roja. Ensalada y tortillas.' },
-      { name: 'Tilapia al Horno', price: '18.95', desc: 'Baked tilapia, sautéed shrimp and veggies, side of fried plantains.', descEs: 'Tilapia al horno, camarón y verduras salteadas, con plátanos fritos.' },
-      { name: 'Camarones Azteca', price: '19.95', desc: 'Sautéed shrimp and veggies tossed in a saffron seafood sauce.', descEs: 'Camarón y verduras salteadas en salsa de mariscos al azafrán.' },
-      { name: 'Mariscada', price: '21.95', desc: 'Seafood stew — shrimp, mussels, scallops, squid, fish, clams.', descEs: 'Sopa de mariscos: camarón, mejillones, vieiras, calamar, pescado y almejas.' },
-      { name: 'Salmon Campeche', price: '22.95', desc: 'Baked salmon, sautéed shrimp, scallops & veggies in saffron seafood sauce.', descEs: 'Salmón al horno, camarón, vieiras y verduras en salsa de mariscos al azafrán.' },
-      { name: 'Las Placitas Paella', price: '19.99', desc: 'Spanish seafood rice — shrimp, scallops, squid, chicken, mussels and clams.', descEs: 'Arroz español con mariscos: camarón, vieiras, calamar, pollo, mejillones y almejas.' },
+      { name: 'Mojarra Frita', price: '18.95', desc: 'Whole fried fish, sautéed shrimp & veggies in salsa roja. Side salad & tortillas.', descEs: 'Pescado entero frito, camarón y verduras en salsa roja. Ensalada y tortillas.', tags: ['seafood'], spice: 2 },
+      { name: 'Tilapia al Horno', price: '18.95', desc: 'Baked tilapia, sautéed shrimp and veggies, side of fried plantains.', descEs: 'Tilapia al horno, camarón y verduras salteadas, con plátanos fritos.', tags: ['seafood'] },
+      { name: 'Camarones Azteca', price: '19.95', desc: 'Sautéed shrimp and veggies tossed in a saffron seafood sauce.', descEs: 'Camarón y verduras salteadas en salsa de mariscos al azafrán.', tags: ['seafood'], spice: 1 },
+      { name: 'Mariscada', price: '21.95', desc: 'Seafood stew — shrimp, mussels, scallops, squid, fish, clams.', descEs: 'Sopa de mariscos: camarón, mejillones, vieiras, calamar, pescado y almejas.', tags: ['seafood'] },
+      { name: 'Salmon Campeche', price: '22.95', desc: 'Baked salmon, sautéed shrimp, scallops & veggies in saffron seafood sauce.', descEs: 'Salmón al horno, camarón, vieiras y verduras en salsa de mariscos al azafrán.', tags: ['seafood'] },
+      { name: 'Las Placitas Paella', price: '19.99', desc: 'Spanish seafood rice — shrimp, scallops, squid, chicken, mussels and clams.', descEs: 'Arroz español con mariscos: camarón, vieiras, calamar, pollo, mejillones y almejas.', tags: ['seafood'] },
     ],
   },
   {
@@ -232,10 +241,44 @@ export const menu: MenuSection[] = [
     items: [
       { name: 'Chicken', price: '19.95', descEs: 'Pollo' },
       { name: 'Steak', price: '20.95', descEs: 'Bistec' },
-      { name: 'Shrimp', price: '20.95', descEs: 'Camarón' },
+      { name: 'Shrimp', price: '20.95', descEs: 'Camarón', tags: ['seafood'] },
       { name: 'Chicken & Steak', price: '20.95', descEs: 'Pollo y Bistec' },
-      { name: 'Steak & Shrimp', price: '20.95', descEs: 'Bistec y Camarón' },
-      { name: 'Tex Mex', price: '21.95', descEs: 'Tex Mex' },
+      { name: 'Steak & Shrimp', price: '20.95', descEs: 'Bistec y Camarón', tags: ['seafood'] },
+      { name: 'Tex Mex', price: '21.95', descEs: 'Tex Mex', tags: ['seafood'], spice: 1 },
     ],
+  },
+];
+
+// Guest testimonials shown on the home page.
+export const testimonials: { en: string; es: string; name: string; stars: number }[] = [
+  {
+    en: 'The pupusas are the best I have had outside El Salvador. The curtido is perfect.',
+    es: 'Las pupusas son las mejores que he probado fuera de El Salvador. El curtido es perfecto.',
+    name: 'Maria G.',
+    stars: 5,
+  },
+  {
+    en: 'A Capitol Hill classic. The fajitas arrive sizzling and the margaritas are dangerous.',
+    es: 'Un clásico de Capitol Hill. Las fajitas llegan chisporroteando y las margaritas son peligrosas.',
+    name: 'James R.',
+    stars: 5,
+  },
+  {
+    en: 'Mariscada is a must. Huge bowl, fresh seafood, and the staff treat you like family.',
+    es: 'La mariscada es imprescindible. Tazón enorme, mariscos frescos y el personal te trata como familia.',
+    name: 'Ana P.',
+    stars: 5,
+  },
+  {
+    en: 'Been coming here since the 90s. Same warmth, same flavor, still my favorite spot in DC.',
+    es: 'Vengo desde los años 90. La misma calidez, el mismo sabor, sigue siendo mi lugar favorito en DC.',
+    name: 'Robert T.',
+    stars: 5,
+  },
+  {
+    en: 'Ordered the sampler for two, left with zero regrets and a box of leftovers.',
+    es: 'Pedimos el sampler para dos, salimos sin arrepentimientos y con una caja de sobras.',
+    name: 'Dana W.',
+    stars: 4,
   },
 ];

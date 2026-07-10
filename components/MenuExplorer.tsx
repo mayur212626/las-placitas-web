@@ -5,13 +5,18 @@ import { motion, AnimatePresence } from 'framer-motion';
 import type { MenuSection, Item } from '@/lib/data';
 import { useCart } from './cart/CartProvider';
 import { useLang } from './i18n/LanguageProvider';
+import { useFavorites, FavButton } from './FavoritesProvider';
+
+type Diet = 'veg' | 'seafood' | 'spicy' | 'favs';
 
 /** Filterable menu with animated reflow between categories. */
 export default function MenuExplorer({ menu }: { menu: MenuSection[] }) {
   const { t, lang } = useLang();
+  const { has } = useFavorites();
   const cats = ['All', ...menu.map((s) => s.title)];
   const [active, setActive] = useState('All');
   const [query, setQuery] = useState('');
+  const [diet, setDiet] = useState<Diet | null>(null);
   const { add } = useCart();
   const [justAdded, setJustAdded] = useState<string | null>(null);
 
@@ -24,21 +29,35 @@ export default function MenuExplorer({ menu }: { menu: MenuSection[] }) {
     setTimeout(() => setJustAdded((c) => (c === id ? null : c)), 1000);
   };
 
+  const matchesDiet = (secTitle: string, it: Item) => {
+    if (!diet) return true;
+    if (diet === 'spicy') return (it.spice ?? 0) > 0;
+    if (diet === 'favs') return has(`${secTitle}-${it.name}`);
+    return it.tags?.includes(diet) ?? false;
+  };
+
   const base = active === 'All' ? menu : menu.filter((s) => s.title === active);
   const q = query.trim().toLowerCase();
-  const sections = q
-    ? base
-        .map((s) => ({
-          ...s,
-          items: s.items.filter(
-            (it) =>
-              it.name.toLowerCase().includes(q) ||
-              (it.desc?.toLowerCase().includes(q) ?? false)
-          ),
-        }))
-        .filter((s) => s.items.length > 0)
-    : base;
+  const sections = base
+    .map((s) => ({
+      ...s,
+      items: s.items.filter(
+        (it) =>
+          matchesDiet(s.title, it) &&
+          (!q ||
+            it.name.toLowerCase().includes(q) ||
+            (it.desc?.toLowerCase().includes(q) ?? false))
+      ),
+    }))
+    .filter((s) => s.items.length > 0);
   const resultCount = sections.reduce((n, s) => n + s.items.length, 0);
+
+  const dietChips: { key: Diet; label: string; icon: string }[] = [
+    { key: 'veg', label: t('fl.veg'), icon: '🌱' },
+    { key: 'seafood', label: t('fl.seafood'), icon: '🐟' },
+    { key: 'spicy', label: t('fl.spicy'), icon: '🌶' },
+    { key: 'favs', label: t('fl.favs'), icon: '♥' },
+  ];
 
   return (
     <div>
@@ -96,6 +115,26 @@ export default function MenuExplorer({ menu }: { menu: MenuSection[] }) {
         })}
       </div>
 
+      {/* diet / spice / favorites filters */}
+      <div className="-mt-6 mb-12 flex flex-wrap gap-2">
+        {dietChips.map((d) => (
+          <button
+            key={d.key}
+            onClick={() => setDiet((cur) => (cur === d.key ? null : d.key))}
+            data-cursor
+            aria-pressed={diet === d.key}
+            className={`inline-flex items-center gap-1.5 rounded-full border px-4 py-1.5 text-[11px] font-semibold uppercase tracking-widest transition-colors ${
+              diet === d.key
+                ? 'border-acid bg-acid/15 text-acid'
+                : 'border-ash/15 text-ash/55 hover:border-acid/50 hover:text-acid'
+            }`}
+          >
+            <span aria-hidden>{d.icon}</span>
+            {d.label}
+          </button>
+        ))}
+      </div>
+
       {q && (
         <p className="mb-8 text-sm text-ash/50">
           {resultCount} {resultCount === 1 ? t('menu.resultFor') : t('menu.resultsFor')}{' '}
@@ -111,6 +150,7 @@ export default function MenuExplorer({ menu }: { menu: MenuSection[] }) {
             onClick={() => {
               setQuery('');
               setActive('All');
+              setDiet(null);
             }}
             data-cursor
             className="mt-5 rounded-full border border-magma/50 px-6 py-2 text-xs uppercase tracking-widest text-magma hover:bg-magma hover:text-obsidian"
@@ -160,11 +200,23 @@ export default function MenuExplorer({ menu }: { menu: MenuSection[] }) {
                         canAdd ? 'cursor-pointer select-none hover:border-magma/40' : ''
                       }`}
                     >
-                      <div className="flex items-baseline justify-between gap-3">
-                        <h3 className="kinetic text-xl text-ash">{it.name}</h3>
-                        {it.price && (
-                          <span className="kinetic text-lg text-magma-grad">${it.price}</span>
-                        )}
+                      <div className="flex items-start justify-between gap-3">
+                        <h3 className="kinetic text-xl text-ash">
+                          {it.name}
+                          {(it.tags?.length || it.spice) && (
+                            <span className="ml-2 align-middle text-sm" aria-hidden>
+                              {it.tags?.includes('veg') && '🌱'}
+                              {it.tags?.includes('seafood') && '🐟'}
+                              {it.spice ? '🌶'.repeat(it.spice) : ''}
+                            </span>
+                          )}
+                        </h3>
+                        <div className="flex shrink-0 items-center gap-2">
+                          {it.price && (
+                            <span className="kinetic text-lg text-magma-grad">${it.price}</span>
+                          )}
+                          <FavButton id={id} />
+                        </div>
                       </div>
                       {(lang === 'es' ? it.descEs || it.desc : it.desc) && (
                         <p className="mt-1 text-sm leading-snug text-ash/55">

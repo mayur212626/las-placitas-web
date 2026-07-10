@@ -14,6 +14,8 @@ import OrderModal from '@/components/OrderModal';
 import { CartProvider } from '@/components/cart/CartProvider';
 import CartDrawer from '@/components/cart/CartDrawer';
 import { LanguageProvider } from '@/components/i18n/LanguageProvider';
+import { FavoritesProvider } from '@/components/FavoritesProvider';
+import CommandPalette from '@/components/CommandPalette';
 import StructuredData from '@/components/StructuredData';
 import ServiceWorkerRegister from '@/components/ServiceWorkerRegister';
 
@@ -89,13 +91,16 @@ export default function RootLayout({
           <SparkTrail />
           <SoundToggle />
           <BackToTop />
-          <CartProvider>
-            <OrderModal />
-            <Navbar />
-            <CartDrawer />
-            {children}
-            <Footer />
-          </CartProvider>
+          <FavoritesProvider>
+            <CartProvider>
+              <OrderModal />
+              <Navbar />
+              <CartDrawer />
+              <CommandPalette />
+              {children}
+              <Footer />
+            </CartProvider>
+          </FavoritesProvider>
         </LanguageProvider>
       </body>
     </html>

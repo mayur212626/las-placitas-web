@@ -8,6 +8,7 @@ import Logo from '@/components/Logo';
 import Marquee from '@/components/Marquee';
 import HeroContent from '@/components/HeroContent';
 import AddToCart from '@/components/cart/AddToCart';
+import Testimonials from '@/components/Testimonials';
 import Magnetic from '@/components/motion/Magnetic';
 import Tilt from '@/components/motion/Tilt';
 import Counter from '@/components/motion/Counter';
@@ -213,6 +214,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* ================= TESTIMONIALS ================= */}
+      <Testimonials />
 
       {/* ================= LOCATIONS ================= */}
       <section id="locations" className="py-28">

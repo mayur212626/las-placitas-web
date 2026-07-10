@@ -1,22 +1,38 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useCart } from './CartProvider';
+import { useCart, type CartItem } from './CartProvider';
 import { useLang } from '../i18n/LanguageProvider';
+import EmberBurst from '../EmberBurst';
 import { locations } from '@/lib/data';
 
 const TAX_RATE = 0.1;
 const TIPS = [0, 0.15, 0.18, 0.2];
+const ORDERS_KEY = 'lp-orders';
+
+type PastOrder = { no: string; date: number; items: CartItem[]; total: number };
 
 export default function CartDrawer() {
-  const { items, total, count, isOpen, close, setQty, remove, clear } = useCart();
-  const { t } = useLang();
+  const { items, total, count, isOpen, close, setQty, remove, clear, addMany } = useCart();
+  const { t, lang } = useLang();
   const [view, setView] = useState<'cart' | 'checkout' | 'done'>('cart');
   const [pickup, setPickup] = useState(locations[0].name);
   const [time, setTime] = useState('asap');
   const [tipPct, setTipPct] = useState(0.18);
   const [orderNo, setOrderNo] = useState('');
+  const [past, setPast] = useState<PastOrder[]>([]);
+
+  // refresh past orders whenever the drawer opens
+  useEffect(() => {
+    if (!isOpen) return;
+    try {
+      const raw = localStorage.getItem(ORDERS_KEY);
+      setPast(raw ? JSON.parse(raw) : []);
+    } catch {
+      setPast([]);
+    }
+  }, [isOpen, view]);
 
   const tax = total * TAX_RATE;
   const tip = total * tipPct;
@@ -33,7 +49,16 @@ export default function CartDrawer() {
   }
 
   const placeOrder = () => {
-    setOrderNo('LP-' + Math.floor(1000 + Math.random() * 9000));
+    const no = 'LP-' + Math.floor(1000 + Math.random() * 9000);
+    setOrderNo(no);
+    try {
+      const raw = localStorage.getItem(ORDERS_KEY);
+      const prev: PastOrder[] = raw ? JSON.parse(raw) : [];
+      const next = [{ no, date: Date.now(), items, total: grand }, ...prev].slice(0, 5);
+      localStorage.setItem(ORDERS_KEY, JSON.stringify(next));
+    } catch {
+      /* ignore */
+    }
     clear();
     setView('done');
   };
@@ -74,7 +99,8 @@ export default function CartDrawer() {
             </div>
 
             {view === 'done' ? (
-              <div className="flex flex-1 flex-col items-center justify-center gap-4 p-8 text-center">
+              <div className="relative flex flex-1 flex-col items-center justify-center gap-4 p-8 text-center">
+                <EmberBurst />
                 <div className="flex h-16 w-16 items-center justify-center rounded-full bg-magma/15 text-3xl text-magma">
                   ✓
                 </div>
@@ -93,16 +119,54 @@ export default function CartDrawer() {
                 </button>
               </div>
             ) : items.length === 0 ? (
-              <div className="flex flex-1 flex-col items-center justify-center gap-3 p-8 text-center">
-                <p className="kinetic text-2xl text-ash/70">{t('cart.empty')}</p>
-                <p className="text-sm text-ash/50">{t('cart.emptySub')}</p>
-                <a
-                  href="/menu"
-                  onClick={closeAll}
-                  className="mt-2 rounded-full border border-magma/50 px-6 py-2 text-xs uppercase tracking-widest text-magma hover:bg-magma hover:text-obsidian"
-                >
-                  {t('cart.browse')}
-                </a>
+              <div className="flex flex-1 flex-col overflow-y-auto p-8">
+                <div className="flex flex-col items-center gap-3 text-center">
+                  <p className="kinetic text-2xl text-ash/70">{t('cart.empty')}</p>
+                  <p className="text-sm text-ash/50">{t('cart.emptySub')}</p>
+                  <a
+                    href="/menu"
+                    onClick={closeAll}
+                    className="mt-2 rounded-full border border-magma/50 px-6 py-2 text-xs uppercase tracking-widest text-magma hover:bg-magma hover:text-obsidian"
+                  >
+                    {t('cart.browse')}
+                  </a>
+                </div>
+
+                {past.length > 0 && (
+                  <div className="mt-10">
+                    <p className="mb-3 text-xs uppercase tracking-[0.3em] text-magma">
+                      {t('ord.past')}
+                    </p>
+                    <ul className="space-y-3">
+                      {past.map((o) => (
+                        <li
+                          key={o.no}
+                          className="glass flex items-center justify-between gap-3 rounded-xl p-4"
+                        >
+                          <div className="min-w-0">
+                            <p className="text-sm text-ash">
+                              <span className="text-magma">{o.no}</span> ·{' '}
+                              {new Date(o.date).toLocaleDateString(
+                                lang === 'es' ? 'es' : 'en-US',
+                                { month: 'short', day: 'numeric' }
+                              )}
+                            </p>
+                            <p className="truncate text-xs text-ash/50">
+                              {o.items.map((i) => `${i.qty}× ${i.name}`).join(', ')}
+                            </p>
+                          </div>
+                          <button
+                            onClick={() => addMany(o.items)}
+                            data-cursor
+                            className="shrink-0 rounded-full bg-magma px-4 py-1.5 text-[11px] font-semibold uppercase tracking-widest text-obsidian transition-transform hover:scale-105"
+                          >
+                            {t('ord.reorder')}
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
             ) : view === 'checkout' ? (
               <>

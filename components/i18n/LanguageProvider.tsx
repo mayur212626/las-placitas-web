@@ -140,6 +140,32 @@ const dict: Dict = {
   'co.checkout': { en: 'Checkout', es: 'Finalizar' },
   'co.orderNo': { en: 'Order number', es: 'Número de pedido' },
   'co.confirm': { en: "We'll have it ready for pickup. Show this number at the counter.", es: 'Lo tendremos listo para recoger. Muestra este número en el mostrador.' },
+
+  // filters + tags
+  'fl.veg': { en: 'Vegetarian', es: 'Vegetariano' },
+  'fl.seafood': { en: 'Seafood', es: 'Mariscos' },
+  'fl.spicy': { en: 'Spicy', es: 'Picante' },
+  'fl.favs': { en: 'Favorites', es: 'Favoritos' },
+
+  // testimonials
+  'tst.kicker': { en: 'Reviews', es: 'Reseñas' },
+  'tst.title1': { en: 'What guests', es: 'Lo que dicen' },
+  'tst.title2': { en: 'say', es: 'los clientes' },
+
+  // command palette
+  'pal.placeholder': { en: 'Search dishes, pages, actions…', es: 'Buscar platillos, páginas, acciones…' },
+  'pal.pages': { en: 'Pages', es: 'Páginas' },
+  'pal.dishes': { en: 'Dishes', es: 'Platillos' },
+  'pal.actions': { en: 'Actions', es: 'Acciones' },
+  'pal.openCart': { en: 'Open cart', es: 'Abrir carrito' },
+  'pal.reserve': { en: 'Reserve a table', es: 'Reservar mesa' },
+  'pal.lang': { en: 'Switch to Español', es: 'Cambiar a English' },
+  'pal.hint': { en: 'navigate · enter select · esc close', es: 'navegar · enter elegir · esc cerrar' },
+  'pal.empty': { en: 'No results', es: 'Sin resultados' },
+
+  // order history
+  'ord.past': { en: 'Past orders', es: 'Pedidos anteriores' },
+  'ord.reorder': { en: 'Reorder', es: 'Repetir' },
 };
 
 type Ctx = { lang: Lang; setLang: (l: Lang) => void; t: (key: string) => string };

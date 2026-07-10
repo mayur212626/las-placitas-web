@@ -16,6 +16,7 @@ type CartCtx = {
   total: number;
   isOpen: boolean;
   add: (item: { id: string; name: string; price: number }) => void;
+  addMany: (items: CartItem[]) => void;
   remove: (id: string) => void;
   setQty: (id: string, qty: number) => void;
   clear: () => void;
@@ -55,6 +56,18 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     });
     setOpen(true);
   };
+  const addMany: CartCtx['addMany'] = (list) => {
+    setItems((prev) => {
+      const next = [...prev];
+      for (const item of list) {
+        const found = next.find((i) => i.id === item.id);
+        if (found) found.qty += item.qty;
+        else next.push({ ...item });
+      }
+      return next;
+    });
+    setOpen(true);
+  };
   const remove: CartCtx['remove'] = (id) => setItems((p) => p.filter((i) => i.id !== id));
   const setQty: CartCtx['setQty'] = (id, qty) =>
     setItems((p) =>
@@ -78,6 +91,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         total,
         isOpen,
         add,
+        addMany,
         remove,
         setQty,
         clear,
