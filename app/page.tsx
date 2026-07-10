@@ -1,8 +1,12 @@
 'use client';
 
+import { useState } from 'react';
 import HeroCanvas from '@/components/HeroCanvas';
+import Lightbox from '@/components/Lightbox';
+import { photoFor } from '@/lib/photos';
 import DishCarousel from '@/components/DishCarousel';
 import FoodArt from '@/components/FoodArt';
+import DishImage from '@/components/DishImage';
 import Reveal from '@/components/Reveal';
 import Logo from '@/components/Logo';
 import Marquee from '@/components/Marquee';
@@ -31,6 +35,7 @@ import {
 
 export default function Home() {
   const { t, lang } = useLang();
+  const [lightbox, setLightbox] = useState<number | null>(null);
   return (
     <main id="home" className="relative overflow-x-hidden">
       {/* ================= HERO ================= */}
@@ -98,7 +103,7 @@ export default function Home() {
                 <Tilt className="h-full">
                   <article className="glass glitch flex h-full flex-col overflow-hidden rounded-2xl">
                     <HeatShimmer className="aspect-[5/3] bg-coal">
-                      <FoodArt kind={f.kind} accent="#ff5e1a" className="h-full w-full" />
+                      <DishImage photoKey={f.photo} kind={f.kind} accent="#ff5e1a" alt={f.name} className="h-full w-full" />
                     </HeatShimmer>
                     <div className="flex flex-1 flex-col p-6">
                       <div className="flex items-center justify-between gap-3">
@@ -136,7 +141,7 @@ export default function Home() {
                 <Tilt className="h-full">
                   <article className="glass glitch flex h-full flex-col overflow-hidden rounded-2xl">
                     <HeatShimmer className="aspect-[5/3] bg-obsidian">
-                      <FoodArt kind={p.kind} accent={p.accent} className="h-full w-full" />
+                      <DishImage photoKey={p.photo} kind={p.kind} accent={p.accent} alt={p.title} className="h-full w-full" />
                     </HeatShimmer>
                     <div className="flex flex-1 flex-col p-6">
                       <div className="flex items-start justify-between gap-3">
@@ -196,18 +201,26 @@ export default function Home() {
             {gallery.map((g, idx) => (
               <Reveal key={g.name} delay={(idx % 4) * 80}>
                 <Tilt max={16}>
-                  <div className="glitch group relative aspect-square overflow-hidden rounded-xl border border-white/10 bg-coal">
-                    <HeatShimmer className="h-full w-full">
-                      <FoodArt
+                  <button
+                    onClick={() => setLightbox(idx)}
+                    data-cursor
+                    aria-label={`View ${g.name}`}
+                    className="glitch group relative block aspect-square w-full overflow-hidden rounded-xl border border-white/10 bg-coal text-left"
+                  >
+                    <div className="h-full w-full transition-transform duration-500 group-hover:scale-110">
+                      <DishImage
+                        photoKey={g.photo}
                         kind={g.kind}
                         accent={g.accent}
-                        className="h-full w-full transition-transform duration-500 group-hover:scale-110"
+                        alt={g.name}
+                        className="h-full w-full"
+                        sizes="(max-width: 768px) 50vw, 25vw"
                       />
-                    </HeatShimmer>
-                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-obsidian to-transparent p-3">
+                    </div>
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-obsidian to-transparent p-3">
                       <span className="kinetic text-lg text-ash">{g.name}</span>
                     </div>
-                  </div>
+                  </button>
                 </Tilt>
               </Reveal>
             ))}
@@ -306,6 +319,17 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <Lightbox
+        slides={gallery.map((g) => ({
+          src: photoFor(g.photo),
+          alt: g.name,
+          fallback: <FoodArt kind={g.kind} accent={g.accent} className="h-full w-full" />,
+        }))}
+        index={lightbox}
+        onClose={() => setLightbox(null)}
+        onIndex={setLightbox}
+      />
     </main>
   );
 }

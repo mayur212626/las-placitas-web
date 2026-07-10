@@ -3,8 +3,9 @@
 import { useEffect, useRef, useState } from 'react';
 import FoodArt, { type FoodKind } from './FoodArt';
 import DrinkArt from './DrinkArt';
+import DishImage from './DishImage';
 
-type Dish = { name: string; accent: string; kind?: FoodKind };
+type Dish = { name: string; accent: string; kind?: FoodKind; photo?: string };
 
 export default function DishCarousel({
   items,
@@ -49,7 +50,14 @@ export default function DishCarousel({
                 {drink ? (
                   <DrinkArt accent={d.accent} className="h-full w-full" />
                 ) : (
-                  <FoodArt kind={d.kind ?? 'plate'} accent={d.accent} className="h-full w-full" />
+                  <DishImage
+                    photoKey={d.photo}
+                    kind={d.kind ?? 'plate'}
+                    accent={d.accent}
+                    alt={d.name}
+                    className="h-full w-full"
+                    sizes="(max-width: 768px) 60vw, 40vw"
+                  />
                 )}
               </div>
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-obsidian to-transparent p-4">

@@ -6,6 +6,8 @@ import type { MenuSection, Item } from '@/lib/data';
 import { useCart } from './cart/CartProvider';
 import { useLang } from './i18n/LanguageProvider';
 import { useFavorites, FavButton } from './FavoritesProvider';
+import DishImage from './DishImage';
+import DishModal from './DishModal';
 
 type Diet = 'veg' | 'seafood' | 'spicy' | 'favs';
 
@@ -19,6 +21,7 @@ export default function MenuExplorer({ menu }: { menu: MenuSection[] }) {
   const [diet, setDiet] = useState<Diet | null>(null);
   const { add } = useCart();
   const [justAdded, setJustAdded] = useState<string | null>(null);
+  const [selected, setSelected] = useState<{ id: string; item: Item } | null>(null);
 
   const addItem = (id: string, it: Item) => {
     if (!it.price) return;
@@ -186,56 +189,69 @@ export default function MenuExplorer({ menu }: { menu: MenuSection[] }) {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
                       transition={{ duration: 0.35 }}
-                      onClick={() => addItem(id, it)}
-                      role={canAdd ? 'button' : undefined}
-                      tabIndex={canAdd ? 0 : undefined}
+                      onClick={() => setSelected({ id, item: it })}
+                      role="button"
+                      tabIndex={0}
                       onKeyDown={(e) => {
-                        if (canAdd && (e.key === 'Enter' || e.key === ' ')) {
+                        if (e.key === 'Enter' || e.key === ' ') {
                           e.preventDefault();
-                          addItem(id, it);
+                          setSelected({ id, item: it });
                         }
                       }}
                       data-cursor
-                      className={`glass glitch rounded-xl p-5 transition-colors ${
-                        canAdd ? 'cursor-pointer select-none hover:border-magma/40' : ''
-                      }`}
+                      className="glass glitch flex cursor-pointer select-none gap-4 rounded-xl p-4 transition-colors hover:border-magma/40"
                     >
-                      <div className="flex items-start justify-between gap-3">
-                        <h3 className="kinetic text-xl text-ash">
-                          {it.name}
-                          {(it.tags?.length || it.spice) && (
-                            <span className="ml-2 align-middle text-sm" aria-hidden>
-                              {it.tags?.includes('veg') && '🌱'}
-                              {it.tags?.includes('seafood') && '🐟'}
-                              {it.spice ? '🌶'.repeat(it.spice) : ''}
-                            </span>
-                          )}
-                        </h3>
-                        <div className="flex shrink-0 items-center gap-2">
-                          {it.price && (
-                            <span className="kinetic text-lg text-magma-grad">${it.price}</span>
-                          )}
-                          <FavButton id={id} />
-                        </div>
+                      <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-lg bg-obsidian">
+                        <DishImage
+                          photoKey={it.photo}
+                          alt={it.name}
+                          className="h-full w-full"
+                          sizes="96px"
+                        />
                       </div>
-                      {(lang === 'es' ? it.descEs || it.desc : it.desc) && (
-                        <p className="mt-1 text-sm leading-snug text-ash/55">
-                          {lang === 'es' ? it.descEs || it.desc : it.desc}
-                        </p>
-                      )}
-                      {canAdd && (
-                        <div className="mt-3">
-                          <span
-                            className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[11px] font-semibold uppercase tracking-widest transition-colors ${
-                              added
-                                ? 'border-acid bg-acid/15 text-acid'
-                                : 'border-magma/50 text-magma'
-                            }`}
-                          >
-                            {added ? t('menu.added') : t('menu.add')}
-                          </span>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-start justify-between gap-3">
+                          <h3 className="kinetic text-xl text-ash">
+                            {it.name}
+                            {(it.tags?.length || it.spice) && (
+                              <span className="ml-2 align-middle text-sm" aria-hidden>
+                                {it.tags?.includes('veg') && '🌱'}
+                                {it.tags?.includes('seafood') && '🐟'}
+                                {it.spice ? '🌶'.repeat(it.spice) : ''}
+                              </span>
+                            )}
+                          </h3>
+                          <div className="flex shrink-0 items-center gap-2">
+                            {it.price && (
+                              <span className="kinetic text-lg text-magma-grad">${it.price}</span>
+                            )}
+                            <FavButton id={id} />
+                          </div>
                         </div>
-                      )}
+                        {(lang === 'es' ? it.descEs || it.desc : it.desc) && (
+                          <p className="mt-1 line-clamp-2 text-sm leading-snug text-ash/55">
+                            {lang === 'es' ? it.descEs || it.desc : it.desc}
+                          </p>
+                        )}
+                        {canAdd && (
+                          <div className="mt-2">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                addItem(id, it);
+                              }}
+                              data-cursor
+                              className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[11px] font-semibold uppercase tracking-widest transition-colors ${
+                                added
+                                  ? 'border-acid bg-acid/15 text-acid'
+                                  : 'border-magma/50 text-magma hover:bg-magma hover:text-obsidian'
+                              }`}
+                            >
+                              {added ? t('menu.added') : t('menu.add')}
+                            </button>
+                          </div>
+                        )}
+                      </div>
                     </motion.div>
                   );
                 })}
@@ -245,6 +261,12 @@ export default function MenuExplorer({ menu }: { menu: MenuSection[] }) {
           ))}
         </div>
       )}
+
+      <DishModal
+        item={selected?.item ?? null}
+        id={selected?.id ?? ''}
+        onClose={() => setSelected(null)}
+      />
     </div>
   );
 }
