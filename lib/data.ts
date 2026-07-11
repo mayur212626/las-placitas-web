@@ -116,13 +116,13 @@ export const awesomeDishes: { name: string; accent: string; kind: FoodKind; phot
 ];
 
 // Carousel: "Homemade Margaritas"
-export const margaritas = [
-  { name: 'House Margarita', accent: '#e8b923' },
-  { name: 'Sangria Margarita', accent: '#b4231f' },
-  { name: 'Spicy Margarita', accent: '#e8731c' },
-  { name: 'Frozen Mango', accent: '#f2a900' },
-  { name: 'Strawberry', accent: '#d6336c' },
-  { name: 'Blue Raspberry', accent: '#2f6fb0' },
+export const margaritas: { name: string; accent: string; photo?: string }[] = [
+  { name: 'House Margarita', accent: '#e8b923', photo: 'margaritaHouse' },
+  { name: 'Sangria Margarita', accent: '#b4231f', photo: 'cocktailCoupe' },
+  { name: 'Spicy Margarita', accent: '#e8731c', photo: 'margaritaLime' },
+  { name: 'Frozen Mango', accent: '#f2a900', photo: 'drinkMango' },
+  { name: 'Strawberry', accent: '#d6336c', photo: 'margaritaStrawberry' },
+  { name: 'Blue Raspberry', accent: '#2f6fb0', photo: 'cocktailBlue' },
 ];
 
 // Pinned horizontal-scroll signature panels

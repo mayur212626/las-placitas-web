@@ -36,6 +36,18 @@ export const photos: Record<string, string> = {
   pupusas: U('photo-1512838243191-e81e8f66f1fd'),
   salad: U('photo-1512621776951-a57141f2eefd'),
   quesadilla: U('photo-1618040996337-56904b7850b9'),
+  // drinks
+  margaritaHouse: U('photo-1556855810-ac404aa91e85'),
+  margaritaLime: U('photo-1609951651556-5334e2706168'),
+  cocktailCoupe: U('photo-1544145945-f90425340c7e'),
+  margaritaFrozen: U('photo-1563223771-375783ee91ad'),
+  drinkMango: U('photo-1587223962930-cb7f31384c19'),
+  margaritaStrawberry: U('photo-1551538827-9c037cb4f32a'),
+  cocktailBlue: U('photo-1546171753-97d7676e4602'),
+  cocktailBar: U('photo-1514362545857-3bc16c4c7d1b'),
+  mojito: U('photo-1536935338788-846bb9981813'),
+  drinkLime: U('photo-1437418747212-8d9709afab22'),
+
   plated: U('photo-1551218808-94e220e084d2'),
   plated2: U('photo-1414235077428-338989a2e8c0'),
   plated3: U('photo-1476224203421-9ac39bcb3327'),

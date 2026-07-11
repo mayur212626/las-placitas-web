@@ -47,7 +47,15 @@ export default function DishCarousel({
               }`}
             >
               <div className={`aspect-[4/3] ${variant === 'jungle' ? 'bg-smoke' : 'bg-coal'}`}>
-                {drink ? (
+                {drink && d.photo ? (
+                  <DishImage
+                    photoKey={d.photo}
+                    accent={d.accent}
+                    alt={d.name}
+                    className="h-full w-full"
+                    sizes="(max-width: 768px) 60vw, 40vw"
+                  />
+                ) : drink ? (
                   <DrinkArt accent={d.accent} className="h-full w-full" />
                 ) : (
                   <DishImage
