@@ -166,6 +166,62 @@ const dict: Dict = {
   // order history
   'ord.past': { en: 'Past orders', es: 'Pedidos anteriores' },
   'ord.reorder': { en: 'Reorder', es: 'Repetir' },
+
+  // toasts
+  'toast.added': { en: 'added to your order', es: 'añadido a tu pedido' },
+  'toast.promo': { en: 'Promo applied', es: 'Promo aplicada' },
+  'toast.news': { en: 'Welcome to the familia! Check your inbox.', es: '¡Bienvenido a la familia! Revisa tu correo.' },
+
+  // order tracker
+  'trk.title': { en: 'Track your order', es: 'Sigue tu pedido' },
+  'trk.received': { en: 'Order received', es: 'Pedido recibido' },
+  'trk.preparing': { en: 'Preparing', es: 'Preparando' },
+  'trk.fire': { en: 'On the fire', es: 'En el fuego' },
+  'trk.ready': { en: 'Ready for pickup', es: 'Listo para recoger' },
+  'trk.chip': { en: 'Track order', es: 'Seguir pedido' },
+  'trk.eta': { en: 'Estimated ready', es: 'Listo aprox.' },
+
+  // customization + nutrition
+  'ex.title': { en: 'Make it yours', es: 'Hazlo a tu gusto' },
+  'nut.cal': { en: 'cal', es: 'cal' },
+
+  // promo
+  'promo.label': { en: 'Promo code', es: 'Código promo' },
+  'promo.apply': { en: 'Apply', es: 'Aplicar' },
+  'promo.invalid': { en: 'Invalid or ineligible code', es: 'Código inválido o no aplicable' },
+  'promo.discount': { en: 'Discount', es: 'Descuento' },
+
+  // cookies + privacy
+  'ck.msg': { en: 'We use cookies to keep your cart, language and orders on this device.', es: 'Usamos cookies para guardar tu carrito, idioma y pedidos en este dispositivo.' },
+  'ck.accept': { en: 'Got it', es: 'Entendido' },
+  'ck.privacy': { en: 'Privacy policy', es: 'Política de privacidad' },
+
+  // story timeline
+  'story.kicker': { en: 'Our story', es: 'Nuestra historia' },
+  'story.1990': { en: 'A single hearth opens on Capitol Hill', es: 'Un solo fogón abre en Capitol Hill' },
+  'story.2005': { en: 'The Washington Post takes notice', es: 'The Washington Post nos descubre' },
+  'story.2019': { en: 'Las Placitas Dos opens on 14th St', es: 'Las Placitas Dos abre en la 14th St' },
+  'story.2025': { en: '35 years of fire and familia', es: '35 años de fuego y familia' },
+
+  // careers + newsletter
+  'car.title': { en: 'Join the familia', es: 'Únete a la familia' },
+  'car.sub': { en: "We're always looking for cooks, servers and smiling faces. Write to us.", es: 'Siempre buscamos cocineros, meseros y caras sonrientes. Escríbenos.' },
+  'car.cta': { en: 'Apply by email', es: 'Postúlate por correo' },
+  'nl.title': { en: 'Get the specials first', es: 'Recibe los especiales primero' },
+  'nl.sub': { en: 'New dishes, drink nights and secret promos. No spam.', es: 'Nuevos platillos, noches de bebidas y promos secretas. Sin spam.' },
+  'nl.placeholder': { en: 'Your email', es: 'Tu correo' },
+  'nl.cta': { en: 'Sign up', es: 'Suscribirme' },
+
+  // nearest location
+  'near.cta': { en: 'Find my nearest Placitas', es: 'Encuentra tu Placitas más cercana' },
+  'near.mi': { en: 'mi away', es: 'mi de distancia' },
+  'near.nearest': { en: 'Nearest to you', es: 'Más cercana a ti' },
+  'near.directions': { en: 'Get directions', es: 'Cómo llegar' },
+  'near.denied': { en: 'Location unavailable — showing both spots.', es: 'Ubicación no disponible — mostrando ambos locales.' },
+
+  // errors
+  'err.title': { en: 'Something burned in the kitchen', es: 'Algo se quemó en la cocina' },
+  'err.retry': { en: 'Try again', es: 'Intentar de nuevo' },
 };
 
 type Ctx = { lang: Lang; setLang: (l: Lang) => void; t: (key: string) => string };

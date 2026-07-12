@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import type { Item } from '@/lib/data';
+import { extras, type Item } from '@/lib/data';
 import DishImage from './DishImage';
 import { FavButton } from './FavoritesProvider';
 import { useCart } from './cart/CartProvider';
@@ -21,16 +21,25 @@ export default function DishModal({
   const { addMany } = useCart();
   const { t, lang } = useLang();
   const [qty, setQty] = useState(1);
+  const [picked, setPicked] = useState<string[]>([]);
 
   useEffect(() => {
-    if (item) setQty(1);
+    if (item) {
+      setQty(1);
+      setPicked([]);
+    }
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [item, onClose]);
 
-  const price = item?.price ? parseFloat(item.price) : NaN;
-  const canAdd = !!item && !Number.isNaN(price);
+  const basePrice = item?.price ? parseFloat(item.price) : NaN;
+  const extrasSum = picked.reduce((s, id) => s + (extras.find((e) => e.id === id)?.price ?? 0), 0);
+  const price = basePrice + extrasSum;
+  const canAdd = !!item && !Number.isNaN(basePrice);
+
+  const togglePick = (id: string) =>
+    setPicked((p) => (p.includes(id) ? p.filter((x) => x !== id) : [...p, id]));
 
   return (
     <AnimatePresence>
@@ -90,6 +99,37 @@ export default function DishModal({
                   {lang === 'es' ? item.descEs || item.desc : item.desc}
                 </p>
               )}
+              {item.cal && (
+                <p className="mt-1 text-xs uppercase tracking-widest text-ash/40">
+                  ≈ {item.cal} {t('nut.cal')}
+                </p>
+              )}
+
+              {canAdd && (
+                <div className="mt-5">
+                  <p className="mb-2 text-xs uppercase tracking-[0.3em] text-magma">{t('ex.title')}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {extras.map((ex) => {
+                      const on = picked.includes(ex.id);
+                      return (
+                        <button
+                          key={ex.id}
+                          onClick={() => togglePick(ex.id)}
+                          data-cursor
+                          aria-pressed={on}
+                          className={`rounded-full border px-3 py-1.5 text-[11px] font-semibold uppercase tracking-widest transition-colors ${
+                            on
+                              ? 'border-acid bg-acid/15 text-acid'
+                              : 'border-ash/20 text-ash/60 hover:border-acid/50 hover:text-acid'
+                          }`}
+                        >
+                          {lang === 'es' ? ex.es : ex.en} +${ex.price.toFixed(2)}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
 
               {canAdd && (
                 <div className="mt-6 flex items-center gap-4">
@@ -114,7 +154,18 @@ export default function DishModal({
                   </div>
                   <button
                     onClick={() => {
-                      addMany([{ id, name: item.name, price, qty }]);
+                      const exNames = picked
+                        .map((p) => extras.find((e) => e.id === p))
+                        .filter(Boolean)
+                        .map((e) => (lang === 'es' ? e!.es : e!.en));
+                      addMany([
+                        {
+                          id: picked.length ? `${id}+${picked.sort().join('.')}` : id,
+                          name: exNames.length ? `${item.name} (+ ${exNames.join(', ')})` : item.name,
+                          price,
+                          qty,
+                        },
+                      ]);
                       onClose();
                     }}
                     data-cursor

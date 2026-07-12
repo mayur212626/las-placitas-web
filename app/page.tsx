@@ -76,6 +76,20 @@ export default function Home() {
               <Stat value={2} label={t('stat.locations')} />
               <Stat value={brand.since} label={t('stat.since')} />
             </div>
+
+            {/* story timeline */}
+            <div className="mt-12 border-l border-magma/25 pl-6">
+              <p className="mb-4 text-xs uppercase tracking-[0.3em] text-magma">{t('story.kicker')}</p>
+              <ol className="space-y-5">
+                {(['1990', '2005', '2019', '2025'] as const).map((y) => (
+                  <li key={y} className="relative">
+                    <span className="absolute -left-[29px] top-1 h-2.5 w-2.5 rounded-full bg-magma shadow-[0_0_10px_rgba(255,94,26,0.8)]" />
+                    <span className="kinetic text-lg text-magma-grad">{y}</span>
+                    <p className="text-sm text-ash/65">{t(`story.${y}`)}</p>
+                  </li>
+                ))}
+              </ol>
+            </div>
           </div>
           <Parallax speed={60} className="relative mx-auto aspect-square w-full max-w-md">
             <div className="absolute inset-0 rounded-full bg-magma/20 blur-3xl" />

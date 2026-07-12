@@ -6,6 +6,7 @@ import Tilt from '@/components/motion/Tilt';
 import Magnetic from '@/components/motion/Magnetic';
 import T from '@/components/i18n/T';
 import OpenStatus from '@/components/OpenStatus';
+import NearestFinder from '@/components/NearestFinder';
 import { locations, delivery, events, hours, dayNames } from '@/lib/data';
 
 function fmt(h: number) {
@@ -31,6 +32,8 @@ export default function LocationsPage() {
         <div className="mt-12">
           <LocationMap />
         </div>
+
+        <NearestFinder />
 
         <div className="mt-12 grid gap-8 md:grid-cols-2">
           {locations.map((loc) => (
@@ -100,7 +103,25 @@ export default function LocationsPage() {
           ))}
         </div>
 
-        <div className="mt-16 flex justify-center">
+        {/* careers */}
+        <div className="glass mt-16 flex flex-col items-center justify-between gap-4 rounded-3xl p-8 text-center md:flex-row md:text-left">
+          <div>
+            <h2 className="kinetic text-3xl text-ash">
+              <T k="car.title" /> <span aria-hidden>👨‍🍳</span>
+            </h2>
+            <p className="mt-1 text-sm text-ash/60">
+              <T k="car.sub" />
+            </p>
+          </div>
+          <a
+            href="mailto:jobs@lasplacitasrestaurant.com"
+            className="shrink-0 rounded-full border border-magma/50 px-6 py-2.5 text-xs font-semibold uppercase tracking-widest text-magma transition-colors hover:bg-magma hover:text-obsidian"
+          >
+            <T k="car.cta" />
+          </a>
+        </div>
+
+        <div className="mt-10 flex justify-center">
           <Magnetic
             href="#"
             data-order

@@ -7,6 +7,8 @@ import {
   useMemo,
   useState,
 } from 'react';
+import { useToast } from '../ToastProvider';
+import { useLang } from '../i18n/LanguageProvider';
 
 export type CartItem = { id: string; name: string; price: number; qty: number };
 
@@ -31,6 +33,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [isOpen, setOpen] = useState(false);
   const [hydrated, setHydrated] = useState(false);
+  const { toast } = useToast();
+  const { t } = useLang();
 
   // load once
   useEffect(() => {
@@ -54,7 +58,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       if (found) return prev.map((i) => (i.id === item.id ? { ...i, qty: i.qty + 1 } : i));
       return [...prev, { ...item, qty: 1 }];
     });
-    setOpen(true);
+    toast(`${item.name} ${t('toast.added')}`, '🛒');
   };
   const addMany: CartCtx['addMany'] = (list) => {
     setItems((prev) => {

@@ -15,9 +15,13 @@ import { CartProvider } from '@/components/cart/CartProvider';
 import CartDrawer from '@/components/cart/CartDrawer';
 import { LanguageProvider } from '@/components/i18n/LanguageProvider';
 import { FavoritesProvider } from '@/components/FavoritesProvider';
+import { ToastProvider } from '@/components/ToastProvider';
 import CommandPalette from '@/components/CommandPalette';
+import CookieBanner from '@/components/CookieBanner';
+import TrackChipMount from '@/components/TrackChipMount';
 import StructuredData from '@/components/StructuredData';
 import ServiceWorkerRegister from '@/components/ServiceWorkerRegister';
+import { Analytics } from '@vercel/analytics/react';
 
 const display = Anton({
   weight: '400',
@@ -91,16 +95,21 @@ export default function RootLayout({
           <SparkTrail />
           <SoundToggle />
           <BackToTop />
-          <FavoritesProvider>
-            <CartProvider>
-              <OrderModal />
-              <Navbar />
-              <CartDrawer />
-              <CommandPalette />
-              {children}
-              <Footer />
-            </CartProvider>
-          </FavoritesProvider>
+          <ToastProvider>
+            <FavoritesProvider>
+              <CartProvider>
+                <OrderModal />
+                <Navbar />
+                <CartDrawer />
+                <CommandPalette />
+                <TrackChipMount />
+                <CookieBanner />
+                {children}
+                <Footer />
+              </CartProvider>
+            </FavoritesProvider>
+          </ToastProvider>
+          <Analytics />
         </LanguageProvider>
       </body>
     </html>

@@ -233,6 +233,11 @@ export default function MenuExplorer({ menu }: { menu: MenuSection[] }) {
                             {lang === 'es' ? it.descEs || it.desc : it.desc}
                           </p>
                         )}
+                        {it.cal && (
+                          <p className="mt-0.5 text-[10px] uppercase tracking-widest text-ash/35">
+                            ≈ {it.cal} {t('nut.cal')}
+                          </p>
+                        )}
                         {canAdd && (
                           <div className="mt-2">
                             <button
