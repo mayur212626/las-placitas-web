@@ -14,6 +14,7 @@ const dict: Dict = {
   'nav.specials': { en: 'Specials', es: 'Especiales' },
   'nav.contact': { en: 'Contact', es: 'Contacto' },
   'nav.order': { en: 'Order', es: 'Ordenar' },
+  'nav.reserve': { en: 'Reserve', es: 'Reservar' },
 
   // hero
   'hero.kicker1': { en: 'Fire-Born Kitchen', es: 'Cocina Nacida del Fuego' },

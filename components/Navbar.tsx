@@ -75,11 +75,17 @@ export default function Navbar() {
           <LangToggle className="hidden sm:flex" />
           <CartButton />
           <a
+            href="/menu"
+            className="hidden rounded-full bg-magma px-5 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-obsidian transition-transform hover:scale-105 md:inline-block"
+          >
+            {t('nav.order')}
+          </a>
+          <a
             href="#"
             data-order
             className="hidden rounded-full border border-magma/60 px-5 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-magma transition-colors hover:bg-magma hover:text-obsidian md:inline-block"
           >
-            {t('nav.order')}
+            {t('nav.reserve')}
           </a>
         </div>
 
@@ -101,6 +107,23 @@ export default function Navbar() {
               </a>
             </li>
           ))}
+          <li className="flex gap-3 pt-2">
+            <a
+              href="/menu"
+              onClick={() => setOpen(false)}
+              className="rounded-full bg-magma px-4 py-1.5 text-xs font-semibold text-obsidian"
+            >
+              {t('nav.order')}
+            </a>
+            <a
+              href="#"
+              data-order
+              onClick={() => setOpen(false)}
+              className="rounded-full border border-magma/60 px-4 py-1.5 text-xs font-semibold text-magma"
+            >
+              {t('nav.reserve')}
+            </a>
+          </li>
           <li className="pt-2">
             <LangToggle />
           </li>

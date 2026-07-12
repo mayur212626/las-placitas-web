@@ -318,8 +318,7 @@ export default function Home() {
           <p className="mx-auto mt-6 max-w-lg text-ash/65">{t('cta.thanks')}</p>
           <div className="mt-10 flex flex-wrap justify-center gap-4">
             <Magnetic
-              href="#"
-              data-order
+              href="/menu"
               className="inline-block rounded-full bg-magma px-10 py-4 text-sm font-semibold uppercase tracking-widest text-obsidian shadow-lg shadow-magma/30"
             >
               {t('cta.order')}
