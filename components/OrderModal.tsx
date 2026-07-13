@@ -2,14 +2,34 @@
 
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { locations } from '@/lib/data';
+import { locations, hours } from '@/lib/data';
 import { useLang } from './i18n/LanguageProvider';
+
+const todayISO = () => new Date().toISOString().slice(0, 10);
+
+/** Half-hour seating slots for a date, from opening until 1h before close. */
+function slotsFor(dateStr: string): string[] {
+  const d = new Date(dateStr + 'T12:00:00');
+  const day = hours[Number.isNaN(d.getDay()) ? new Date().getDay() : d.getDay()];
+  const out: string[] = [];
+  for (let h = day.open; h <= day.close - 1; h += 0.5) {
+    const hr = Math.floor(h);
+    const min = h % 1 ? '30' : '00';
+    const period = hr >= 12 ? 'PM' : 'AM';
+    const h12 = hr % 12 === 0 ? 12 : hr % 12;
+    out.push(`${h12}:${min} ${period}`);
+  }
+  return out;
+}
 
 /** Reservation/order modal opened by any element with a [data-order] attribute. */
 export default function OrderModal() {
   const { t } = useLang();
   const [open, setOpen] = useState(false);
   const [sent, setSent] = useState(false);
+  const [date, setDate] = useState(todayISO());
+  const [time, setTime] = useState('7:00 PM');
+  const slots = slotsFor(date);
 
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
@@ -89,7 +109,28 @@ export default function OrderModal() {
                       </option>
                     ))}
                   </select>
-                  <input type="date" className={`${inp} sm:col-span-2`} />
+                  <input
+                    type="date"
+                    value={date}
+                    min={todayISO()}
+                    onChange={(e) => {
+                      setDate(e.target.value || todayISO());
+                      setTime('');
+                    }}
+                    className={inp}
+                  />
+                  <select
+                    value={time || slots[Math.min(16, slots.length - 1)]}
+                    onChange={(e) => setTime(e.target.value)}
+                    aria-label={t('order.time')}
+                    className={inp}
+                  >
+                    {slots.map((s) => (
+                      <option key={s} value={s}>
+                        {s}
+                      </option>
+                    ))}
+                  </select>
                   <button
                     type="submit"
                     data-cursor
@@ -105,6 +146,9 @@ export default function OrderModal() {
                   ✓
                 </div>
                 <h3 className="kinetic text-3xl text-ash">{t('order.thanks')}</h3>
+                <p className="mt-3 kinetic text-xl text-magma-grad">
+                  {date} · {time || slots[Math.min(16, slots.length - 1)]}
+                </p>
                 <p className="mt-2 text-ash/65">{t('order.confirm')}</p>
                 <button
                   onClick={() => setOpen(false)}

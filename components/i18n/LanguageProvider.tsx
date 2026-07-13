@@ -85,6 +85,7 @@ const dict: Dict = {
   'order.name': { en: 'Name', es: 'Nombre' },
   'order.phone': { en: 'Phone', es: 'Teléfono' },
   'order.guests': { en: 'guests', es: 'personas' },
+  'order.time': { en: 'Time', es: 'Hora' },
   'order.request': { en: 'Request Reservation', es: 'Solicitar Reserva' },
   'order.thanks': { en: '¡Gracias!', es: '¡Gracias!' },
   'order.confirm': { en: "Request received. We'll call to confirm your table.", es: 'Solicitud recibida. Te llamaremos para confirmar tu mesa.' },
