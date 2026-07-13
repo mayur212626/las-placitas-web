@@ -23,6 +23,7 @@ export default function CartDrawer() {
   const [pickup, setPickup] = useState(locations[0].name);
   const [time, setTime] = useState('asap');
   const [tipPct, setTipPct] = useState(0.18);
+  const [customTip, setCustomTip] = useState<string | null>(null); // null = percent mode
   const [orderNo, setOrderNo] = useState('');
   const [past, setPast] = useState<PastOrder[]>([]);
   const [promoInput, setPromoInput] = useState('');
@@ -68,7 +69,8 @@ export default function CartDrawer() {
   const discount = promo ? (total * promo.pct) / 100 : 0;
   const base = total - discount;
   const tax = base * TAX_RATE;
-  const tip = base * tipPct;
+  const tip =
+    customTip !== null ? Math.max(0, parseFloat(customTip) || 0) : base * tipPct;
   const grand = base + tax + tip;
 
   // pickup time options: ASAP + next few half-hour slots
@@ -98,6 +100,7 @@ export default function CartDrawer() {
     }
     setPromo(null);
     setPromoInput('');
+    setCustomTip(null);
     clear();
     setView('done');
   };
@@ -258,14 +261,17 @@ export default function CartDrawer() {
 
                   <div>
                     <span className="text-xs uppercase tracking-widest text-ash/60">{t('co.tip')}</span>
-                    <div className="mt-2 grid grid-cols-4 gap-2">
+                    <div className="mt-2 grid grid-cols-5 gap-2">
                       {TIPS.map((tp) => (
                         <button
                           key={tp}
-                          onClick={() => setTipPct(tp)}
+                          onClick={() => {
+                            setTipPct(tp);
+                            setCustomTip(null);
+                          }}
                           data-cursor
                           className={`rounded-lg border py-2 text-sm font-semibold transition-colors ${
-                            tipPct === tp
+                            customTip === null && tipPct === tp
                               ? 'border-magma bg-magma text-obsidian'
                               : 'border-ash/20 text-ash/70 hover:border-magma'
                           }`}
@@ -273,7 +279,33 @@ export default function CartDrawer() {
                           {tp === 0 ? '—' : `${tp * 100}%`}
                         </button>
                       ))}
+                      <button
+                        onClick={() => setCustomTip((c) => (c === null ? '' : c))}
+                        data-cursor
+                        className={`rounded-lg border py-2 text-xs font-semibold uppercase transition-colors ${
+                          customTip !== null
+                            ? 'border-magma bg-magma text-obsidian'
+                            : 'border-ash/20 text-ash/70 hover:border-magma'
+                        }`}
+                      >
+                        {t('co.customTip')}
+                      </button>
                     </div>
+                    {customTip !== null && (
+                      <div className="mt-2 flex items-center gap-2">
+                        <span className="text-lg text-ash/60">$</span>
+                        <input
+                          type="number"
+                          min="0"
+                          step="0.5"
+                          autoFocus
+                          value={customTip}
+                          onChange={(e) => setCustomTip(e.target.value)}
+                          placeholder="5.00"
+                          className="w-full rounded-lg border border-ash/15 bg-obsidian/60 px-4 py-2.5 text-sm text-ash outline-none placeholder:text-ash/25 focus:border-magma"
+                        />
+                      </div>
+                    )}
                   </div>
 
                   <div>

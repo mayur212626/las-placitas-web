@@ -135,6 +135,7 @@ const dict: Dict = {
   'co.time': { en: 'Pickup time', es: 'Hora de recogida' },
   'co.asap': { en: 'ASAP (20–30 min)', es: 'Cuanto antes (20–30 min)' },
   'co.tip': { en: 'Tip', es: 'Propina' },
+  'co.customTip': { en: 'Custom', es: 'Otro' },
   'co.tax': { en: 'Tax', es: 'Impuesto' },
   'co.total': { en: 'Total', es: 'Total' },
   'co.place': { en: 'Place Order', es: 'Realizar Pedido' },
