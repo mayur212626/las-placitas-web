@@ -7,6 +7,7 @@ import DishImage from './DishImage';
 import { FavButton } from './FavoritesProvider';
 import { useCart } from './cart/CartProvider';
 import { useLang } from './i18n/LanguageProvider';
+import { useToast } from './ToastProvider';
 
 /** Quick-view: big photo, tags, description, quantity stepper, add to order. */
 export default function DishModal({
@@ -20,8 +21,24 @@ export default function DishModal({
 }) {
   const { addMany } = useCart();
   const { t, lang } = useLang();
+  const { toast } = useToast();
   const [qty, setQty] = useState(1);
   const [picked, setPicked] = useState<string[]>([]);
+
+  const share = async () => {
+    if (!item) return;
+    const url = `${location.origin}/menu?dish=${encodeURIComponent(id)}`;
+    const data = { title: `${item.name} — Las Placitas`, text: item.desc ?? item.name, url };
+    try {
+      if (navigator.share) await navigator.share(data);
+      else {
+        await navigator.clipboard.writeText(url);
+        toast(t('sh.copied'), '🔗');
+      }
+    } catch {
+      /* user cancelled */
+    }
+  };
 
   useEffect(() => {
     if (item) {
@@ -73,8 +90,19 @@ export default function DishModal({
               >
                 ✕
               </button>
-              <div className="absolute left-4 top-4">
+              <div className="absolute left-4 top-4 flex items-center gap-2">
                 <FavButton id={id} className="bg-obsidian/70" />
+                <button
+                  onClick={share}
+                  data-cursor
+                  aria-label={t('sh.share')}
+                  className="flex h-8 w-8 items-center justify-center rounded-full border border-ash/20 bg-obsidian/70 text-ash/60 transition hover:border-magma hover:text-magma"
+                >
+                  <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" />
+                    <path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4" />
+                  </svg>
+                </button>
               </div>
             </div>
 

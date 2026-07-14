@@ -17,6 +17,7 @@ import { LanguageProvider } from '@/components/i18n/LanguageProvider';
 import { FavoritesProvider } from '@/components/FavoritesProvider';
 import { ToastProvider } from '@/components/ToastProvider';
 import CommandPalette from '@/components/CommandPalette';
+import Assistant from '@/components/Assistant';
 import CookieBanner from '@/components/CookieBanner';
 import TrackChipMount from '@/components/TrackChipMount';
 import StructuredData from '@/components/StructuredData';
@@ -102,6 +103,7 @@ export default function RootLayout({
                 <Navbar />
                 <CartDrawer />
                 <CommandPalette />
+                <Assistant />
                 <TrackChipMount />
                 <CookieBanner />
                 {children}

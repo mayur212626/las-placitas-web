@@ -7,7 +7,8 @@ import { useLang } from '../i18n/LanguageProvider';
 import { useToast } from '../ToastProvider';
 import EmberBurst from '../EmberBurst';
 import OrderTracker, { readActiveOrder, ACTIVE_KEY, type ActiveOrder } from '../OrderTracker';
-import { locations, promoCodes } from '@/lib/data';
+import { locations, promoCodes, hours } from '@/lib/data';
+import { getPunches, addPunch, hasReward, clearReward, waitEstimate, PUNCHES_FOR_REWARD } from '@/lib/loyalty';
 
 const TAX_RATE = 0.1;
 const TIPS = [0, 0.15, 0.18, 0.2];
@@ -29,6 +30,18 @@ export default function CartDrawer() {
   const [promoInput, setPromoInput] = useState('');
   const [promo, setPromo] = useState<{ code: string; pct: number } | null>(null);
   const [tracked, setTracked] = useState<ActiveOrder | null>(null);
+  const [dayOffset, setDayOffset] = useState(0);
+  const [people, setPeople] = useState(1);
+  const [punches, setPunches] = useState(0);
+  const [reward, setReward] = useState(false);
+
+  // loyalty state refresh whenever the drawer opens or an order lands
+  useEffect(() => {
+    if (isOpen) {
+      setPunches(getPunches());
+      setReward(hasReward());
+    }
+  }, [isOpen, view]);
 
   // the floating chip asks us to open in tracking view
   useEffect(() => {
@@ -73,15 +86,31 @@ export default function CartDrawer() {
     customTip !== null ? Math.max(0, parseFloat(customTip) || 0) : base * tipPct;
   const grand = base + tax + tip;
 
-  // pickup time options: ASAP + next few half-hour slots
-  const slots = ['asap'];
-  const now = new Date();
-  for (let i = 1; i <= 5; i++) {
-    const d = new Date(now.getTime() + i * 30 * 60000);
-    slots.push(
-      d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })
-    );
+  // pickup time options — today: ASAP + next half-hours; future days: opening hours
+  const slots: string[] = [];
+  if (dayOffset === 0) {
+    slots.push('asap');
+    const now = new Date();
+    for (let i = 1; i <= 5; i++) {
+      const d = new Date(now.getTime() + i * 30 * 60000);
+      slots.push(d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }));
+    }
+  } else {
+    const d = new Date(Date.now() + dayOffset * 86400000);
+    const day = hours[d.getDay()];
+    for (let h = day.open; h <= day.close - 1; h += 0.5) {
+      const hr = Math.floor(h);
+      const h12 = hr % 12 === 0 ? 12 : hr % 12;
+      slots.push(`${h12}:${h % 1 ? '30' : '00'} ${hr >= 12 ? 'PM' : 'AM'}`);
+    }
   }
+
+  const dayLabel = (off: number) => {
+    if (off === 0) return t('sch.today');
+    if (off === 1) return t('sch.tomorrow');
+    const d = new Date(Date.now() + off * 86400000);
+    return d.toLocaleDateString(lang === 'es' ? 'es' : 'en-US', { weekday: 'long', day: 'numeric' });
+  };
 
   const placeOrder = () => {
     const no = 'LP-' + Math.floor(1000 + Math.random() * 9000);
@@ -98,6 +127,8 @@ export default function CartDrawer() {
     } catch {
       /* ignore */
     }
+    const unlocked = addPunch();
+    toast(unlocked ? t('loy.reward') : t('loy.earned'), '🔥');
     setPromo(null);
     setPromoInput('');
     setCustomTip(null);
@@ -245,9 +276,27 @@ export default function CartDrawer() {
                   </label>
 
                   <label className="block">
+                    <span className="text-xs uppercase tracking-widest text-ash/60">{t('sch.day')}</span>
+                    <select
+                      value={dayOffset}
+                      onChange={(e) => {
+                        setDayOffset(parseInt(e.target.value, 10));
+                        setTime(parseInt(e.target.value, 10) === 0 ? 'asap' : '');
+                      }}
+                      className="mt-2 w-full rounded-lg border border-ash/15 bg-obsidian/60 px-4 py-3 text-sm text-ash outline-none focus:border-magma"
+                    >
+                      {[0, 1, 2, 3].map((off) => (
+                        <option key={off} value={off}>
+                          {dayLabel(off)}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+
+                  <label className="block">
                     <span className="text-xs uppercase tracking-widest text-ash/60">{t('co.time')}</span>
                     <select
-                      value={time}
+                      value={time || slots[0]}
                       onChange={(e) => setTime(e.target.value)}
                       className="mt-2 w-full rounded-lg border border-ash/15 bg-obsidian/60 px-4 py-3 text-sm text-ash outline-none focus:border-magma"
                     >
@@ -257,6 +306,11 @@ export default function CartDrawer() {
                         </option>
                       ))}
                     </select>
+                    {dayOffset === 0 && (
+                      <p className="mt-1.5 text-xs text-ash/45">
+                        🔥 {t('wait.now')}: ~{waitEstimate()} min
+                      </p>
+                    )}
                   </label>
 
                   <div>
@@ -343,10 +397,42 @@ export default function CartDrawer() {
                 </div>
 
                 <div className="border-t border-white/10 p-6">
-                  <div className="mb-4 flex items-baseline justify-between">
+                  <div className="mb-3 flex items-baseline justify-between">
                     <span className="text-sm uppercase tracking-widest text-ash/60">{t('co.total')}</span>
                     <span className="kinetic text-3xl text-magma-grad">${grand.toFixed(2)}</span>
                   </div>
+
+                  {/* split the bill */}
+                  <div className="mb-4 flex items-center justify-between rounded-xl border border-ash/10 px-4 py-2.5">
+                    <span className="text-xs uppercase tracking-widest text-ash/55">
+                      ➗ {t('split.title')}
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => setPeople((n) => Math.max(1, n - 1))}
+                        data-cursor
+                        aria-label="Fewer people"
+                        className="flex h-6 w-6 items-center justify-center rounded-full border border-ash/20 text-ash/70 hover:border-magma hover:text-magma"
+                      >
+                        −
+                      </button>
+                      <span className="w-5 text-center text-sm tabular-nums text-ash">{people}</span>
+                      <button
+                        onClick={() => setPeople((n) => Math.min(12, n + 1))}
+                        data-cursor
+                        aria-label="More people"
+                        className="flex h-6 w-6 items-center justify-center rounded-full border border-ash/20 text-ash/70 hover:border-magma hover:text-magma"
+                      >
+                        +
+                      </button>
+                      {people > 1 && (
+                        <span className="ml-2 text-sm text-acid">
+                          ${(grand / people).toFixed(2)} {t('split.each')}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
                   <button
                     onClick={placeOrder}
                     data-cursor
@@ -383,6 +469,37 @@ export default function CartDrawer() {
                 </ul>
 
                 <div className="border-t border-white/10 p-6">
+                  {/* Fuego Points punch card */}
+                  <div className="mb-4 rounded-xl border border-ash/10 bg-obsidian/40 px-4 py-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-semibold uppercase tracking-widest text-magma">
+                        {t('loy.title')}
+                      </span>
+                      <span className="flex gap-1.5" aria-label={`${punches}/${PUNCHES_FOR_REWARD}`}>
+                        {[...Array(PUNCHES_FOR_REWARD)].map((_, i) => (
+                          <span key={i} className={i < punches ? '' : 'opacity-25 grayscale'}>
+                            🔥
+                          </span>
+                        ))}
+                      </span>
+                    </div>
+                    {reward ? (
+                      <button
+                        onClick={() => {
+                          addMany([{ id: 'reward-pupusas', name: 'Pupusas (Fuego Reward)', price: 0, qty: 1 }]);
+                          clearReward();
+                          setReward(false);
+                        }}
+                        data-cursor
+                        className="mt-2 w-full rounded-full bg-acid/15 py-2 text-xs font-semibold uppercase tracking-widest text-acid transition hover:bg-acid hover:text-obsidian"
+                      >
+                        🫓 {t('loy.redeem')}
+                      </button>
+                    ) : (
+                      <p className="mt-1 text-[11px] text-ash/45">{t('loy.sub')}</p>
+                    )}
+                  </div>
+
                   <div className="mb-4 flex items-baseline justify-between">
                     <span className="text-sm uppercase tracking-widest text-ash/60">{t('cart.subtotal')}</span>
                     <span className="kinetic text-3xl text-magma-grad">${total.toFixed(2)}</span>

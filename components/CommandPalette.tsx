@@ -6,6 +6,15 @@ import { menu } from '@/lib/data';
 import { useCart } from './cart/CartProvider';
 import { useLang } from './i18n/LanguageProvider';
 
+type SpeechRecognitionLike = {
+  lang: string;
+  interimResults: boolean;
+  onresult: ((e: { results: { [i: number]: { [i: number]: { transcript: string } } } }) => void) | null;
+  onend: (() => void) | null;
+  onerror: (() => void) | null;
+  start: () => void;
+};
+
 type Entry =
   | { type: 'page'; label: string; href: string }
   | { type: 'dish'; label: string; sub?: string; price: number; id: string }
@@ -18,7 +27,31 @@ export default function CommandPalette() {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [index, setIndex] = useState(0);
+  const [listening, setListening] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // voice search via the Web Speech API (where supported)
+  const startVoice = () => {
+    const w = window as unknown as {
+      SpeechRecognition?: new () => SpeechRecognitionLike;
+      webkitSpeechRecognition?: new () => SpeechRecognitionLike;
+    };
+    const Rec = w.SpeechRecognition || w.webkitSpeechRecognition;
+    if (!Rec) return;
+    const rec = new Rec();
+    rec.lang = lang === 'es' ? 'es-ES' : 'en-US';
+    rec.interimResults = false;
+    rec.onresult = (e) => {
+      const text = e.results[0]?.[0]?.transcript ?? '';
+      setQuery(text);
+      setIndex(0);
+      setListening(false);
+    };
+    rec.onend = () => setListening(false);
+    rec.onerror = () => setListening(false);
+    setListening(true);
+    rec.start();
+  };
 
   // open via Ctrl/Cmd+K or the navbar button (custom event)
   useEffect(() => {
@@ -150,6 +183,18 @@ export default function CommandPalette() {
                 placeholder={t('pal.placeholder')}
                 className="w-full bg-transparent text-sm text-ash outline-none placeholder:text-ash/35"
               />
+              <button
+                onClick={startVoice}
+                data-cursor
+                aria-label="Voice search"
+                className={`shrink-0 rounded-full border px-2 py-1 text-sm transition-colors ${
+                  listening
+                    ? 'animate-glowPulse border-blood/60 text-blood'
+                    : 'border-ash/20 text-ash/50 hover:border-magma hover:text-magma'
+                }`}
+              >
+                🎙
+              </button>
               <kbd className="hidden shrink-0 rounded border border-ash/20 px-1.5 py-0.5 text-[10px] text-ash/50 sm:block">
                 ESC
               </kbd>

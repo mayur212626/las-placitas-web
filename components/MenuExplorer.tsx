@@ -1,11 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { MenuSection, Item } from '@/lib/data';
 import { useCart } from './cart/CartProvider';
 import { useLang } from './i18n/LanguageProvider';
 import { useFavorites, FavButton } from './FavoritesProvider';
+import { useToast } from './ToastProvider';
 import DishImage from './DishImage';
 import DishModal from './DishModal';
 
@@ -22,6 +23,33 @@ export default function MenuExplorer({ menu }: { menu: MenuSection[] }) {
   const { add } = useCart();
   const [justAdded, setJustAdded] = useState<string | null>(null);
   const [selected, setSelected] = useState<{ id: string; item: Item } | null>(null);
+  const { toast } = useToast();
+
+  // deep links: ?dish=<id> opens its quick view, ?table=N enables table ordering
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const dishId = params.get('dish');
+    if (dishId) {
+      for (const sec of menu) {
+        for (const it of sec.items) {
+          if (`${sec.title}-${it.name}` === dishId) {
+            setSelected({ id: dishId, item: it });
+            break;
+          }
+        }
+      }
+    }
+    const table = params.get('table');
+    if (table) {
+      try {
+        localStorage.setItem('lp-table', table);
+      } catch {
+        /* ignore */
+      }
+      toast(`${t('tbl.ordering')} ${table}`, '🪑');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const addItem = (id: string, it: Item) => {
     if (!it.price) return;

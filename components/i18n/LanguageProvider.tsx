@@ -225,6 +225,36 @@ const dict: Dict = {
   // errors
   'err.title': { en: 'Something burned in the kitchen', es: 'Algo se quemó en la cocina' },
   'err.retry': { en: 'Try again', es: 'Intentar de nuevo' },
+
+  // assistant
+  'as.title': { en: 'Placita, your menu guide', es: 'Placita, tu guía del menú' },
+  'as.hello': { en: 'Hola! Ask me things like "spicy seafood under $20" or "something vegetarian".', es: '¡Hola! Pregúntame cosas como "mariscos picantes por menos de $20" o "algo vegetariano".' },
+  'as.placeholder': { en: 'Ask about the menu…', es: 'Pregunta sobre el menú…' },
+  'as.found': { en: 'Here is what I found:', es: 'Esto es lo que encontré:' },
+  'as.none': { en: 'Nothing matched that — try "seafood", "spicy", "veg" or a price like "under 15".', es: 'Nada coincidió — prueba "mariscos", "picante", "veg" o un precio como "menos de 15".' },
+  'as.open': { en: 'Ask the menu', es: 'Pregunta al menú' },
+
+  // loyalty
+  'loy.title': { en: 'Fuego Points', es: 'Puntos Fuego' },
+  'loy.sub': { en: 'Every order earns a flame. Five flames = free pupusas.', es: 'Cada pedido gana una llama. Cinco llamas = pupusas gratis.' },
+  'loy.earned': { en: 'Flame earned!', es: '¡Llama ganada!' },
+  'loy.reward': { en: 'Free pupusas unlocked!', es: '¡Pupusas gratis desbloqueadas!' },
+  'loy.redeem': { en: 'Redeem free pupusas', es: 'Canjear pupusas gratis' },
+
+  // split bill
+  'split.title': { en: 'Split the bill', es: 'Dividir la cuenta' },
+  'split.each': { en: 'each', es: 'cada uno' },
+
+  // scheduling + wait
+  'sch.day': { en: 'Pickup day', es: 'Día de recogida' },
+  'sch.today': { en: 'Today', es: 'Hoy' },
+  'sch.tomorrow': { en: 'Tomorrow', es: 'Mañana' },
+  'wait.now': { en: 'Current kitchen wait', es: 'Espera actual en cocina' },
+
+  // share + table
+  'sh.share': { en: 'Share', es: 'Compartir' },
+  'sh.copied': { en: 'Link copied', es: 'Enlace copiado' },
+  'tbl.ordering': { en: 'Ordering for table', es: 'Pidiendo para la mesa' },
 };
 
 type Ctx = { lang: Lang; setLang: (l: Lang) => void; t: (key: string) => string };
