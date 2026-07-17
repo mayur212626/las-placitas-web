@@ -13,10 +13,6 @@ html {
 
 body {
   @apply bg-obsidian text-ash font-body antialiased;
-  cursor: none;
-}
-@media (pointer: coarse) {
-  body { cursor: auto; }
 }
 
 .container-x {
@@ -113,8 +109,5 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
-  }
-  body {
-    cursor: auto;
   }
 }

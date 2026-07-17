@@ -37,9 +37,9 @@ export default function Cursor() {
       className="pointer-events-none fixed z-[70] -translate-x-1/2 -translate-y-1/2 mix-blend-screen"
     >
       <motion.div
-        animate={{ scale: hot ? 2.4 : 1, opacity: hot ? 0.9 : 0.6 }}
+        animate={{ scale: hot ? 2 : 1, opacity: hot ? 0.7 : 0.45 }}
         transition={{ type: 'spring', stiffness: 250, damping: 20 }}
-        className="h-7 w-7 rounded-full bg-magma blur-md"
+        className="h-5 w-5 rounded-full bg-magma blur-md"
       />
     </motion.div>
   );
