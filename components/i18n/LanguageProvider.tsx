@@ -85,6 +85,9 @@ const dict: Dict = {
   'order.name': { en: 'Name', es: 'Nombre' },
   'order.phone': { en: 'Phone', es: 'Teléfono' },
   'order.guests': { en: 'guests', es: 'personas' },
+  'order.pickTable': { en: 'Pick your table', es: 'Elige tu mesa' },
+  'order.tableTaken': { en: 'taken', es: 'ocupada' },
+  'order.tableSel': { en: 'Table', es: 'Mesa' },
   'order.time': { en: 'Time', es: 'Hora' },
   'order.request': { en: 'Request Reservation', es: 'Solicitar Reserva' },
   'order.thanks': { en: '¡Gracias!', es: '¡Gracias!' },
@@ -255,6 +258,14 @@ const dict: Dict = {
   'sh.share': { en: 'Share', es: 'Compartir' },
   'sh.copied': { en: 'Link copied', es: 'Enlace copiado' },
   'tbl.ordering': { en: 'Ordering for table', es: 'Pidiendo para la mesa' },
+
+  // weather specials
+  'wx.rain': { en: 'Rainy in DC — perfect sopa weather. Mariscada is calling.', es: 'Lluvia en DC — clima perfecto para sopa. La mariscada te llama.' },
+  'wx.hot': { en: 'Scorcher in DC — frozen margaritas are the move today.', es: 'Calorón en DC — hoy tocan margaritas frozen.' },
+  'wx.cold': { en: 'Cold night in DC — warm up with sopa de res and pupusas.', es: 'Noche fría en DC — caliéntate con sopa de res y pupusas.' },
+  'wx.nice': { en: 'Beautiful day in DC — patio weather and house margaritas.', es: 'Día hermoso en DC — clima de patio y margaritas de la casa.' },
+  'wx.cta.menu': { en: 'See soups', es: 'Ver sopas' },
+  'wx.cta.drinks': { en: 'See margaritas', es: 'Ver margaritas' },
 };
 
 type Ctx = { lang: Lang; setLang: (l: Lang) => void; t: (key: string) => string };

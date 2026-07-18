@@ -106,7 +106,10 @@ export default function RootLayout({
                 <Assistant />
                 <TrackChipMount />
                 <CookieBanner />
-                {children}
+                <a href="#content" className="skip-link">
+                  Skip to content
+                </a>
+                <div id="content">{children}</div>
                 <Footer />
               </CartProvider>
             </FavoritesProvider>

@@ -13,6 +13,7 @@ import Marquee from '@/components/Marquee';
 import HeroContent from '@/components/HeroContent';
 import AddToCart from '@/components/cart/AddToCart';
 import Testimonials from '@/components/Testimonials';
+import WeatherSpecial from '@/components/WeatherSpecial';
 import Magnetic from '@/components/motion/Magnetic';
 import Tilt from '@/components/motion/Tilt';
 import Counter from '@/components/motion/Counter';
@@ -61,6 +62,9 @@ export default function Home() {
           />
         </VelocitySkew>
       </section>
+
+      {/* ================= WEATHER SPECIAL ================= */}
+      <WeatherSpecial />
 
       {/* ================= ABOUT ================= */}
       <section id="about" className="relative py-32">
